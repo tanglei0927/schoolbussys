@@ -1,0 +1,86 @@
+{
+  "id": "1834898",
+  "name": "xc",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1509740",
+      "name": "客户",
+      "font_class": "customer",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "6255759",
+      "name": "订单",
+      "font_class": "dingdan",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "6671162",
+      "name": "线路参数",
+      "font_class": "xianlucanshu",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "7140576",
+      "name": "学校",
+      "font_class": "xuexiao",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "8094190",
+      "name": "奖励:激励",
+      "font_class": "jianglijili",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "8337877",
+      "name": "资源 16",
+      "font_class": "ziyuan",
+      "unicode": "e6b4",
+      "unicode_decimal": 59060
+    },
+    {
+      "icon_id": "8634416",
+      "name": "小区",
+      "font_class": "xiaoqu",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "13030053",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "13900897",
+      "name": "消息",
+      "font_class": "ziyuan1",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "14947322",
+      "name": "请假",
+      "font_class": "ziyuan206",
+      "unicode": "e721",
+      "unicode_decimal": 59169
+    },
+    {
+      "icon_id": "1327500",
+      "name": "right-arrow",
+      "font_class": "right-arrow",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    }
+  ]
+}
