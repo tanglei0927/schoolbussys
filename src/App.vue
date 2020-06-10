@@ -116,6 +116,9 @@ export default {
          border-bottom: 1px solid #ccc;
          padding-bottom: 10px;
          font-size: 16px;
+         span{
+           border:0;
+         }
          i,.el-button{
             position: absolute;
             font-size: 16px;
@@ -145,5 +148,13 @@ export default {
         .el-button{
             float: right;
         }
+    }
+    .el-drawer{
+      overflow-x: hidden !important;
+      overflow-y: scroll !important;
+      .el-input{
+        width: 200px;
+        margin: 20px;
+      }
     }
 </style>

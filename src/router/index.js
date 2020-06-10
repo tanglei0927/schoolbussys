@@ -73,10 +73,30 @@ Vue.use(VueRouter)
         name:"linesdetails",
         component:()=> import('../views/lines/linesdetails.vue')
       },
-      {
+      {//小区
         path:"/community",
         name:"community",
         component:()=> import('../views/community/index.vue')
+      },
+      {//车辆管理
+        path:"/car",
+        name:"car",
+        component:()=> import('../views/car/index.vue')
+      },
+      {//车辆添加、修改、详情
+        path:"/carInfo",
+        name:"carInfo",
+        component:()=> import('../views/car/info.vue')
+      },
+      {//安全员管理
+        path:"/security",
+        name:"security",
+        component:()=> import('../views/security/index.vue')
+      },
+      {//安全员添加、修改、详情
+        path:"/securityInfo",
+        name:"securityInfo",
+        component:()=> import('../views/security/info.vue')
       }
     ]
   },

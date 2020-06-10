@@ -42,8 +42,8 @@
             <template slot="title"><i class="iconfont icon-ziyuan"></i>资源管理</template>
             <el-menu-item-group>
               <el-menu-item index="4-1">设备管理</el-menu-item>
-              <el-menu-item index="4-2">车辆管理</el-menu-item>
-              <el-menu-item index="4-3">安全员管理</el-menu-item>
+              <el-menu-item index="4-2"  @click="goRouter('car','4-2')">车辆管理</el-menu-item>
+              <el-menu-item index="4-3"  @click="goRouter('security','4-2')">安全员管理</el-menu-item>
               <el-menu-item index="4-4">司机管理</el-menu-item>
             </el-menu-item-group>            
           </el-submenu>          
@@ -154,23 +154,33 @@ export default {
         break
       case 'siteInfo':
       case 'site':
-         sessionStorage.activePath="3-1"
-        this.activePath='3-1'
-        break
+          sessionStorage.activePath="3-1"
+          this.activePath='3-1'
+          break
       case 'presetInfo':
       case 'preset':
       case 'presetAdd':
-         sessionStorage.activePath="3-2"
-        this.activePath='3-2'
-        break
-       case 'lines':
-       case 'linesdetails':
+          sessionStorage.activePath="3-2"
+          this.activePath='3-2'
+          break
+      case 'lines':
+      case 'linesdetails':
           sessionStorage.activePath="3-3"
           this.activePath='3-3'
-        break
-        case 'community':
+      break
+      case 'community':
           sessionStorage.activePath='9-1'
           this.activePath='9-1'
+          break
+      case 'carInfo':
+      case 'car':
+          sessionStorage.activePath='4-2'
+          this.activePath='4-2'
+          break
+      case 'security':
+      case 'securityInfo':
+          sessionStorage.activePath='4-3'
+          this.activePath='4-3'
           break
     }
     next()

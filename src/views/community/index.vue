@@ -9,7 +9,7 @@
             <el-form>
                 <el-form-item label="小区名称：">
                     <el-input placeholder="请输入小区名称" v-model="commNmae"></el-input>
-                    <el-button type="primary" @click="search()">搜索</el-button>
+                    <el-button type="primary" @click="init()">搜索</el-button>
                 </el-form-item>
             </el-form>
         </div>
