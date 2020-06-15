@@ -45,9 +45,9 @@ axios.interceptors.response.use(function (response) {
     // if(!!response.data.msg){
     //   Toast({message:response.data.msg,duration:500});
     // }   
-    if(response.data.code ==9300){
+    if(response.data.code ==250){
         // 未登录，请重新登录 
-        Message.warning('未登录，请重新登录')
+        Message.warning(response.data.msg)
         
       // setTimeout(()=>{
         // router.push({name:'login'});
@@ -93,7 +93,7 @@ axios.interceptors.response.use(function (response) {
       if(lock){ // 是否提示 true不显示，false 显示
         alert('网络异常')
       }
-      console.log("想学习222222")
+      // console.log("想学习222222")
 
       return response
     }

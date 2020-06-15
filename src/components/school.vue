@@ -3,6 +3,7 @@
             title="学校列表"
             :visible.sync="show"
             direction="rtl"
+            :before-close="closeDraw"
             size="50%">
             <el-input v-model="schoolStr" placeholder="请输入学校名称"></el-input>
             <el-button type="success" @click="init()" plain>搜索</el-button>
@@ -38,7 +39,8 @@ export default {
             userInfo:{},
             gridData1:[],
             schooltotal:[],
-            schoolStr:''
+            schoolStr:'',
+            form:{}
         }
     },
     created(){
@@ -46,14 +48,19 @@ export default {
         this.init()
     },
     methods:{
+        closeDraw(){
+            console.log("关闭前")
+            let data=this.form
+            this.$emit("changeToSchool",data)
+        },
          handleSizeChange(val){
             console.log(val)
-            this.form.pageSize=val
-            this.form.pageNum=1
+            this.pageSize=val
+            this.pageNum=1
              this.init()
         },
         handleCurrentChange(val){
-            this.form.pageNum=val
+            this.pageNum=val
              this.init()
         },
          init(){//获取学校列表
@@ -74,6 +81,7 @@ export default {
             let data={}
             data.id=row.id
             data.name=row.name
+            this.form=data
             this.$emit("changeToSchool",data)
         },
         

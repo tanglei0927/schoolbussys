@@ -27,6 +27,12 @@ Vue.use(VueRouter)
         component:()=> import('../views/index/rundetails.vue')
       },
       {
+        // 安全报告
+        path:"/report",
+        name:"report",
+        component:()=> import('../views/index/report.vue')
+      },
+      {
         //学校管理
         path:"/school",
         name:"school",
@@ -97,6 +103,61 @@ Vue.use(VueRouter)
         path:"/securityInfo",
         name:"securityInfo",
         component:()=> import('../views/security/info.vue')
+      },
+      {//司机管理
+        path:"/drivers",
+        name:"drivers",
+        component:()=> import('../views/drivers/index.vue')
+      },
+      {//司机添加、修改、详情
+        path:"/driversInfo",
+        name:"driversInfo",
+        component:()=> import('../views/drivers/info.vue')
+      },
+      {//家长管理
+        path:"/parent",
+        name:"parent",
+        component:()=> import('../views/customer/parent.vue')
+      },
+      {//家长管理
+        path:"/parentinfo",
+        name:"parentinfo",
+        component:()=> import('../views/customer/parentinfo.vue')
+      },
+      {//学生管理
+        path:"/children",
+        name:"children",
+        component:()=> import('../views/customer/childen.vue')
+      },
+      {//学生管理
+        path:"/childreninfo",
+        name:"childreninfo",
+        component:()=> import('../views/customer/childreninfo.vue')
+      },
+       {//订单管理
+        path:"/order",
+        name:"order",
+        component:()=> import('../views/order/index.vue')
+      },
+      {//请假管理
+        path:"/leave",
+        name:"leave",
+        component:()=> import('../views/leave/index.vue')
+      },
+      {//奖励管理
+        path:"/reward",
+        name:"reward",
+        component:()=> import('../views/reward/index.vue')
+      },
+      {//消息管理
+        path:"/msg",
+        name:"msg",
+        component:()=> import('../views/msg/index.vue')
+      },
+      {//消息管理
+        path:"/msginfo",
+        name:"msginfo",
+        component:()=> import('../views/msg/info.vue')
       }
     ]
   },

@@ -2,7 +2,7 @@
      <div>
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ name: 'index' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'security' }">安全员管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'drivers' }">司机管理</el-breadcrumb-item>
             <el-breadcrumb-item >{{title}}</el-breadcrumb-item>
         </el-breadcrumb>
         <div>
@@ -18,10 +18,14 @@
                     </el-select>
                     <span v-else>{{form.sex==1?'男':'女'}}</span>
                 </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="form.idCard" v-if="isEdit"></el-input>
-                    <span v-else>{{form.idCard}}</span>
-                </el-form-item>                 
+                <el-form-item label="驾驶证编号">
+                    <el-input v-model="form.driveCardId" v-if="isEdit"></el-input>
+                    <span v-else>{{form.driveCardId}}</span>
+                </el-form-item>    
+                 <el-form-item label="驾龄">
+                    <el-input v-model="form.driveAge" v-if="isEdit"></el-input>
+                    <span v-else>{{form.driveAge}}</span>
+                </el-form-item>              
                 <el-form-item label="所属学校">
                     <span style="margin-right:20px;">{{form.schoolName}}</span>
                     <el-button v-if="isEdit" type="warning" @click="showDraw=true" plain>选择学校</el-button>
@@ -57,15 +61,22 @@
                     <span v-else>{{form.emergencyContact}}</span>
                 </el-form-item>
                  <el-form-item label="紧急联系人电话">
-                    <el-input v-if="isEdit" v-model="form.emergencyContactPhone"></el-input>
-                    <span v-else>{{form.emergencyContactPhone}}</span>
+                    <el-input v-if="isEdit" v-model="form.emergencyPhone"></el-input>
+                    <span v-else>{{form.emergencyPhone}}</span>
                 </el-form-item>
-                <el-form-item label="是否有教师资格证">
-                    <el-radio-group v-if="isEdit" v-model="form.teacherCertification">
+                <el-form-item label="是否发生过重大交通事故">
+                    <el-radio-group v-if="isEdit" v-model="form.isHaveAccident">
                         <el-radio :label="1">有</el-radio>
                         <el-radio :label="0">没有</el-radio>
                     </el-radio-group>
-                    <span v-else>{{form.teacherCertification==1?'有':'没有'}}</span>
+                    <span v-else>{{form.isHaveAccident==1?'有':'没有'}}</span>
+                </el-form-item>
+                <el-form-item label="是否有违法行为">
+                    <el-radio-group v-if="isEdit" v-model="form.illegal">
+                        <el-radio :label="1">有</el-radio>
+                        <el-radio :label="0">没有</el-radio>
+                    </el-radio-group>
+                    <span v-else>{{form.illegal==1?'有':'没有'}}</span>
                 </el-form-item>
                 <el-form-item label="省、市、区" class="address">
                     <el-select v-model="form.province.code" placeholder="请选择省份" @change="changeProvince">
@@ -79,17 +90,9 @@
                     </el-select> 
                     <!-- <span v-else>{{form.compulsoryInsurance==1?'有':'没有'}}</span> -->
                 </el-form-item>
-                 <el-form-item label="街道">
-                    <el-input v-if="isEdit" v-model="form.street"></el-input>
-                    <span v-else>{{form.street}}</span>
-                </el-form-item>
-                <el-form-item label="小区">
-                    <el-input v-if="isEdit" v-model="form.village"></el-input>
-                    <span v-else>{{form.village}}</span>
-                </el-form-item>
-                <el-form-item label="门牌号">
-                    <el-input v-if="isEdit" v-model="form.houseNumber"></el-input>
-                    <span v-else>{{form.houseNumber}}</span>
+                 <el-form-item label="地址">
+                    <el-input v-if="isEdit" v-model="form.detailAddreee"></el-input>
+                    <span v-else>{{form.detailAddreee}}</span>
                 </el-form-item>
                 <el-form-item label="是否禁用">
                     <el-radio-group v-if="isEdit"  v-model="form.isForbidden">
@@ -97,27 +100,7 @@
                         <el-radio :label="0">不禁用</el-radio>
                     </el-radio-group>
                     <span v-else>{{form.isForbidden==1?'禁用':'不禁用'}}</span>
-                </el-form-item>
-                  <el-form-item label="账号">
-                    <el-input v-model="form.account" v-if="isEdit"></el-input>
-                    <span v-else>{{form.account}}</span>
-                </el-form-item>
-                  <el-form-item label="密码">
-                    <el-input v-model="form.password" v-if="isEdit"></el-input>
-                    <span v-else>{{form.password}}</span>
-                </el-form-item>
-                 <el-form-item class="uplaodbox" label="头像">
-                     <img v-if="form.photo" :src="$url+'file/readFile/'+form.photo" alt="">
-                    <el-upload
-                        :action="$url+'file/uploadFile'"
-                        list-type="picture-card"
-                        name="fileName"
-                        :show-file-list="false"
-                        :on-success="upSuccess">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                </el-form-item>
-
+                </el-form-item>   
             </el-form>
             <div class="btns">
                 <el-button v-if="isEdit" type="warning" @click="submitInfo()" plain>提交</el-button>
@@ -147,10 +130,10 @@ export default {
                 name:'',
                 sex:"",
                 birthday:'',
-                idCard:'',
-                teacherCertification:1,
+                driveCardId:'',
+                illegal:0,
+                isHaveAccident:0,
                 isForbidden:0,
-                photo:'',
                 province:{
                     name:'',
                     code:null
@@ -192,7 +175,7 @@ export default {
             this.showDraw=false
         },
         goBack(){
-            this.$router.push({name:'security'})
+            this.$router.push({name:'drivers'})
         },
          upSuccess(res){
             // 图片上传成功
@@ -204,24 +187,26 @@ export default {
             // console.log(this.form)
             let data=this.form
             let reg=/^1[3456789]\d{9}$/
+                console.log(data)
             if(!reg.test(data.phone)){
                  this.$message({
                     type:"warning",
                     message:'电话号码格式不正确'
                 })
-            }else if(!reg.test(data.emergencyContactPhone)){
+            }else if(!reg.test(data.emergencyPhone)){
+                // console.log(data.emergencyPhone)
                  this.$message({
                     type:"warning",
                     message:'紧急联系人电话号码格式不正确'
                 })
-            }else if(!data.account||!data.password||!data.photo||!data.idCard||!data.schoolId){
+            }else if(!data.driveCardId||!data.schoolId){
                 this.$message({
                     type:"warning",
                     message:'请完善信息'
                 })
             }else{
                 let reqUrl=""
-                reqUrl=data.id?"mgSecurity/update":"mgSecurity/add"
+                reqUrl=data.id?"mgDriver/update":"mgDriver/add"
                 let tsMsg=data.id?'修改':'添加'
                 if(this.value1){
                      data.birthday=this.$untils.getDate(this.value1)
@@ -249,9 +234,9 @@ export default {
             }
         },
        init(){
-           this.$axios.post(this.$url+"mgSecurity/detail",{id:this.id}).then(res=>{
+           this.$axios.post(this.$url+"mgDriver/detail",{id:this.id}).then(res=>{
                if(res.code==100){
-                   this.form=res.info
+                    this.form=res.info
                     this.changeProvince(this.form.province.code,true)
                     this.changeCity(this.form.city.code,true)
                     this.value1=this.form.birthday
@@ -261,7 +246,7 @@ export default {
         changeProvince(val,status){
          // console.log("省份")
          this.areaList=[]   
-         if(!status){
+         if(!status)     {
             this.form.city.name=""
             this.form.city.code=""
             this.form.area.name=""

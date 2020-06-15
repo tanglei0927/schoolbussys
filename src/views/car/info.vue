@@ -137,11 +137,11 @@ export default {
             this.title="车辆详情"
             this.id=this.$route.query.id
             this.isEdit=false
+            this.init()
         }else{
             this.title="添加"
             this.isEdit=true
         }
-        this.init()
     },
     methods:{
         changeToSchool(data){
@@ -223,5 +223,8 @@ export default {
         margin:0 20px;
         width: 100px;
     }
+}
+.el-input{
+    width: 300px;
 }
 </style>

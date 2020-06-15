@@ -2,7 +2,7 @@
      <div>
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ name: 'index' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'security' }">安全员管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'parent' }">家长管理</el-breadcrumb-item>
             <el-breadcrumb-item >{{title}}</el-breadcrumb-item>
         </el-breadcrumb>
         <div>
@@ -11,31 +11,21 @@
                     <el-input v-model="form.name" v-if="isEdit"></el-input>
                     <span v-else>{{form.name}}</span>
                 </el-form-item>
-                <el-form-item label="性别">
-                     <el-select  v-if="isEdit" v-model="form.sex" placeholder="请选择性别">
-                        <el-option label="男" :value="1"></el-option>
-                        <el-option label="女" :value="2"></el-option>
+                 <el-form-item label="电话">
+                    <el-input v-if="isEdit" v-model="form.phone"></el-input>
+                    <span v-else>{{form.phone}}</span>
+                </el-form-item>
+                <el-form-item label="关系">
+                     <el-select  v-if="isEdit" v-model="form.relation" placeholder="请选择关系">
+                        <el-option value="父亲"></el-option>
+                        <el-option value="母亲"></el-option>
+                        <el-option value="爷爷"></el-option>
+                        <el-option value="奶奶"></el-option>
+                        <el-option value="叔叔"></el-option>
+                        <el-option value="阿姨"></el-option>
                     </el-select>
-                    <span v-else>{{form.sex==1?'男':'女'}}</span>
-                </el-form-item>
-                <el-form-item label="身份证号">
-                    <el-input v-model="form.idCard" v-if="isEdit"></el-input>
-                    <span v-else>{{form.idCard}}</span>
-                </el-form-item>                 
-                <el-form-item label="所属学校">
-                    <span style="margin-right:20px;">{{form.schoolName}}</span>
-                    <el-button v-if="isEdit" type="warning" @click="showDraw=true" plain>选择学校</el-button>
-                    <!-- <span v-else>{{form.ascription==1?'学校':(form.ascription==2?'个人':'')}}</span> -->
-                </el-form-item>
-                <el-form-item label="出生日期">
-                    <el-date-picker
-                        v-if="isEdit"
-                        v-model="value1"
-                        type="date"
-                        placeholder="选择日期">
-                    </el-date-picker>
-                    <span v-else>{{form.birthday}}</span>
-                </el-form-item>
+                    <span v-else>{{form.relation}}</span>
+                </el-form-item>                
                 <el-form-item label="学历">
                      <el-select v-if="isEdit"  v-model="form.education" placeholder="请选择学历">
                         <el-option value="小学"></el-option>
@@ -47,25 +37,6 @@
                         <el-option value="博士"></el-option>
                     </el-select>
                     <span v-else>{{form.education}}</span>
-                </el-form-item>
-                 <el-form-item label="电话">
-                    <el-input v-if="isEdit" v-model="form.phone"></el-input>
-                    <span v-else>{{form.phone}}</span>
-                </el-form-item>
-                 <el-form-item label="紧急联系人">
-                    <el-input v-if="isEdit" v-model="form.emergencyContact"></el-input>
-                    <span v-else>{{form.emergencyContact}}</span>
-                </el-form-item>
-                 <el-form-item label="紧急联系人电话">
-                    <el-input v-if="isEdit" v-model="form.emergencyContactPhone"></el-input>
-                    <span v-else>{{form.emergencyContactPhone}}</span>
-                </el-form-item>
-                <el-form-item label="是否有教师资格证">
-                    <el-radio-group v-if="isEdit" v-model="form.teacherCertification">
-                        <el-radio :label="1">有</el-radio>
-                        <el-radio :label="0">没有</el-radio>
-                    </el-radio-group>
-                    <span v-else>{{form.teacherCertification==1?'有':'没有'}}</span>
                 </el-form-item>
                 <el-form-item label="省、市、区" class="address">
                     <el-select v-model="form.province.code" placeholder="请选择省份" @change="changeProvince">
@@ -79,46 +50,75 @@
                     </el-select> 
                     <!-- <span v-else>{{form.compulsoryInsurance==1?'有':'没有'}}</span> -->
                 </el-form-item>
-                 <el-form-item label="街道">
-                    <el-input v-if="isEdit" v-model="form.street"></el-input>
-                    <span v-else>{{form.street}}</span>
+                 <el-form-item label="地址">
+                    <el-input v-if="isEdit" v-model="form.detailAddreee"></el-input>
+                    <span v-else>{{form.detailAddreee}}</span>
                 </el-form-item>
-                <el-form-item label="小区">
-                    <el-input v-if="isEdit" v-model="form.village"></el-input>
-                    <span v-else>{{form.village}}</span>
-                </el-form-item>
-                <el-form-item label="门牌号">
-                    <el-input v-if="isEdit" v-model="form.houseNumber"></el-input>
-                    <span v-else>{{form.houseNumber}}</span>
-                </el-form-item>
-                <el-form-item label="是否禁用">
-                    <el-radio-group v-if="isEdit"  v-model="form.isForbidden">
-                        <el-radio :label="1">禁用</el-radio>
-                        <el-radio :label="0">不禁用</el-radio>
-                    </el-radio-group>
-                    <span v-else>{{form.isForbidden==1?'禁用':'不禁用'}}</span>
-                </el-form-item>
-                  <el-form-item label="账号">
-                    <el-input v-model="form.account" v-if="isEdit"></el-input>
-                    <span v-else>{{form.account}}</span>
-                </el-form-item>
-                  <el-form-item label="密码">
-                    <el-input v-model="form.password" v-if="isEdit"></el-input>
-                    <span v-else>{{form.password}}</span>
-                </el-form-item>
-                 <el-form-item class="uplaodbox" label="头像">
-                     <img v-if="form.photo" :src="$url+'file/readFile/'+form.photo" alt="">
-                    <el-upload
-                        :action="$url+'file/uploadFile'"
-                        list-type="picture-card"
-                        name="fileName"
-                        :show-file-list="false"
-                        :on-success="upSuccess">
-                        <i class="el-icon-plus"></i>
-                    </el-upload>
-                </el-form-item>
-
+                <el-form-item label="头像">
+                   <img :src="form.photo" alt="">
+                </el-form-item>   
             </el-form>
+            <h3><span>下级家长</span></h3>
+            <el-table
+                :data="list"
+                border
+                style="width: 100%">
+                <el-table-column
+                prop="id"
+                label="id"
+                width="80">
+                </el-table-column>
+                <el-table-column
+                prop="name"
+                label="姓名"
+                width="80">
+                </el-table-column>
+                <el-table-column
+                prop="relation"
+                label="关系"
+                width="80">                  
+                </el-table-column>   
+                <el-table-column
+                prop="phone"
+                label="电话"
+                width="100">
+                </el-table-column>
+                <el-table-column
+                prop="detailAddreee"
+                label="地址"
+                width="150"> 
+                <template slot-scope="scope">
+                    <p>{{scope.row.province.name}}{{scope.row.city.name}}{{scope.row.area.name}}</p>
+                </template> 
+                </el-table-column>  
+                <el-table-column
+                prop="detailAddreee"
+                label="详细地址"
+                width="200">                  
+                </el-table-column> 
+                <el-table-column
+                prop="detailAddreee"
+                label="头像"
+                width="150"> 
+                <template slot-scope="scope">
+                    <img :src="$url+'eaOss/download/'+scope.row.photo" alt="">
+                </template> 
+                </el-table-column>  
+                <el-table-column
+                prop="createTime"
+                label="创建时间">                  
+                </el-table-column>
+                <el-table-column
+                fixed="right"
+                label="操作"
+                width="100">
+                <template slot-scope="scope">
+                    <el-button @click="lookDetails(scope.row)" type="text" size="small">详情</el-button>
+                    <!-- <el-button @click="deleteDrivers(scope.row)" type="text" size="small">删除</el-button> -->
+                </template>
+                </el-table-column>
+            </el-table>
+
             <div class="btns">
                 <el-button v-if="isEdit" type="warning" @click="submitInfo()" plain>提交</el-button>
                 <el-button v-else type="warning" @click="isEdit=true" plain>修改</el-button>
@@ -147,10 +147,10 @@ export default {
                 name:'',
                 sex:"",
                 birthday:'',
-                idCard:'',
-                teacherCertification:1,
+                driveCardId:'',
+                illegal:0,
+                isHaveAccident:0,
                 isForbidden:0,
-                photo:'',
                 province:{
                     name:'',
                     code:null
@@ -167,7 +167,8 @@ export default {
              provinceList:[],
             cityList:[],
             areaList:[],
-            value1:''
+            value1:'',
+            list:[],
         }
     },
     created(){
@@ -192,7 +193,7 @@ export default {
             this.showDraw=false
         },
         goBack(){
-            this.$router.push({name:'security'})
+            this.$router.push({name:'parent'})
         },
          upSuccess(res){
             // 图片上传成功
@@ -204,24 +205,20 @@ export default {
             // console.log(this.form)
             let data=this.form
             let reg=/^1[3456789]\d{9}$/
+                console.log(data)
             if(!reg.test(data.phone)){
                  this.$message({
                     type:"warning",
                     message:'电话号码格式不正确'
                 })
-            }else if(!reg.test(data.emergencyContactPhone)){
-                 this.$message({
-                    type:"warning",
-                    message:'紧急联系人电话号码格式不正确'
-                })
-            }else if(!data.account||!data.password||!data.photo||!data.idCard||!data.schoolId){
+            }else if(!data.phone||!data.name){
                 this.$message({
                     type:"warning",
                     message:'请完善信息'
                 })
             }else{
                 let reqUrl=""
-                reqUrl=data.id?"mgSecurity/update":"mgSecurity/add"
+                reqUrl=data.id?"mgParent/update":"mgParent/add"
                 let tsMsg=data.id?'修改':'添加'
                 if(this.value1){
                      data.birthday=this.$untils.getDate(this.value1)
@@ -249,19 +246,20 @@ export default {
             }
         },
        init(){
-           this.$axios.post(this.$url+"mgSecurity/detail",{id:this.id}).then(res=>{
+           this.$axios.post(this.$url+"mgParent/detail",{id:this.id}).then(res=>{
                if(res.code==100){
-                   this.form=res.info
+                    this.form=res.info
                     this.changeProvince(this.form.province.code,true)
                     this.changeCity(this.form.city.code,true)
                     this.value1=this.form.birthday
+                    this.list=this.form.parentSubs
                }
-           })
+           })          
        },
         changeProvince(val,status){
          // console.log("省份")
          this.areaList=[]   
-         if(!status){
+         if(!status)     {
             this.form.city.name=""
             this.form.city.code=""
             this.form.area.name=""
@@ -327,6 +325,13 @@ export default {
             })
          })
        },
+       lookDetails(row){
+           this.$router.push({name:'parentinfo',query:{id:row.id}})
+           setTimeout(()=>{
+               this.id=row.id
+               this.init()
+           },1000)
+       }
     }
     
 }
@@ -359,5 +364,8 @@ export default {
         width: 150px;
         margin: 0 10px;
     }
+}
+.el-table{
+    margin-top: 10px;
 }
 </style>

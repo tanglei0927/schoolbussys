@@ -80,6 +80,7 @@
                 <template slot-scope="scope">
                     <el-button @click="updateLines(scope.row)" type="text" size="small">编辑</el-button>
                     <el-button type="text" @click="lookDetails(scope.row)" size="small">详情</el-button>
+                    <el-button type="text" @click="lineRunDtails(scope.row)" size="small">运行记录</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -285,7 +286,11 @@ export default {
         },
         lookDetails(item){
             this.$router.push({name:'linesdetails',query:{id:item.id}})
-        }
+        },
+        lineRunDtails(row){
+            // 线路运行记录
+            this.$router.push({name:"run",query:{lineId:row.id}})
+        },
     }
 }
 </script>

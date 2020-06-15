@@ -115,7 +115,12 @@
                 prop="detailAddreee"
                 label="家庭住所"
                 width="120">
-                </el-table-column>               
+                </el-table-column>   
+                <el-table-column label="操作" fixed="right" >
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="lookReport(scope.row)" size="small">安全报告</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="block">
                 <el-pagination
@@ -185,6 +190,10 @@ export default {
                     this.total=res.info.total
                 }
             })
+        },
+        lookReport(row){
+            // 查看安全报告
+            this.$router.push({name:'report',query:{id:row.id}})
         },
     }
 }

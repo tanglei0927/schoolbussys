@@ -2,7 +2,7 @@
      <div>
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ name: 'index' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item >安全员管理</el-breadcrumb-item>
+            <el-breadcrumb-item >司机管理</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="searchbox">
             <h3><span>筛选</span>
@@ -19,53 +19,18 @@
                         <el-option label="禁用" value="1"></el-option>
                     </el-select>
                 </el-form-item>  
-                <el-form-item label="安全员">
-                  <el-input placeholder="请输入安全员姓名" v-model="form.name"></el-input>
-                </el-form-item>     
-                <el-form-item label="时间:">
-                <el-date-picker
-                    v-model="value1"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-                </el-date-picker>  
+                <el-form-item label="名称">
+                  <el-input placeholder="请输入司机姓名" v-model="form.name"></el-input>
                 </el-form-item>  
 
             </el-form>
         </div>
-         <el-drawer
-            title="学校列表"
-            :visible.sync="schoolshow"
-            direction="rtl"
-            size="50%">
-            <el-input v-model="schoolStr" placeholder="请输入学校名称"></el-input>
-            <el-button type="success" @click="getSchool()" plain>搜索</el-button>
-            <el-table  ref="yunyTable" :data="gridData1">
-                <el-table-column property="id" label="id" width="80"></el-table-column>
-                <el-table-column property="name" label="学校" ></el-table-column>
-                <el-table-column property="name" label="操作">
-                 <template slot-scope="scope">
-                    <el-button @click="changeSchool(scope.row)" type="text" size="small">确定</el-button>
-                </template>
-                </el-table-column>
-            </el-table>
-             <div class="block">
-                <el-pagination
-                    @size-change="handleSizeChange1"
-                    @current-change="handleCurrentChange1"
-                    :current-page.sync="pageNum1"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size="100"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="schooltotal">
-                </el-pagination>
-            </div>
-        </el-drawer>
+         
+        <School :show="schoolshow" @changeToSchool="changeToSchool" />
 
         <div class="table">
             <h3 class="cl">
-                <span>安全员列表</span>
+                <span>司机列表</span>
                 <el-button type="success" @click="goAdd()" plain>添加</el-button>
             </h3>
              <el-table
@@ -82,6 +47,16 @@
                 label="姓名"
                 width="80">
                 </el-table-column>
+                <el-table-column
+                prop="driveAge"
+                label="驾龄"
+                width="120">                  
+                </el-table-column>
+                <el-table-column
+                prop="driveCardId"
+                label="驾驶证号"
+                width="120">                  
+                </el-table-column>  
                 <el-table-column
                 prop="birthday"
                 label="出生日期"
@@ -117,12 +92,7 @@
                 <template slot-scope="scope">
                     <p>{{scope.row.status==1?'禁用':'不禁用'}}</p>
                 </template>
-                </el-table-column>
-                 <el-table-column
-                prop="idCard"
-                label="身份证"
-                width="200">                  
-                </el-table-column>      
+                </el-table-column>                  
                 <el-table-column
                 prop="area"
                 label="地址"
@@ -132,12 +102,9 @@
                 </template> 
                 </el-table-column>  
                 <el-table-column
-                prop="area"
+                prop="detailAddreee"
                 label="详细地址"
-                width="150"> 
-                <template slot-scope="scope">
-                    <p>{{scope.row.street+scope.row.village+scope.row.houseNumber}}</p>
-                </template>                  
+                width="150">                  
                 </el-table-column>              
                  <el-table-column
                 prop="emergencyContact"
@@ -145,25 +112,38 @@
                 width="100">                  
                 </el-table-column>
                 <el-table-column
-                prop="emergencyContactPhone"
+                prop="emergencyPhone"
                 label="紧急联系人电话"
                 width="120">                  
-                </el-table-column>
+                </el-table-column>                
                 <el-table-column
-                prop="area"
-                label="是否有教师资格证"
+                prop="isHaveAccident"
+                label="是否发生过重大交通事故"
                 width="150"> 
                 <template slot-scope="scope">
-                    <p>{{scope.row.teacherCertification?'有':'没有'}}</p>
+                    <p>{{scope.row.isHaveAccident?'有':'没有'}}</p>
                 </template>                  
                 </el-table-column> 
+                 <el-table-column
+                prop="illegal"
+                label="是否有违法行为"
+                width="150"> 
+                <template slot-scope="scope">
+                    <p>{{scope.row.illegal?'有':'没有'}}</p>
+                </template>                  
+                </el-table-column> 
+                <el-table-column
+                prop="createTime"
+                label="创建时间"
+                width="120">                  
+                </el-table-column>
                 <el-table-column
                 fixed="right"
                 label="操作"
                 width="100">
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">详情</el-button>
-                    <!-- <el-button @click="deleteCar(scope.row)" type="text" size="small">删除</el-button> -->
+                    <el-button @click="deleteDrivers(scope.row)" type="text" size="small">删除</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -184,7 +164,10 @@
      </div>
 </template>
 <script>
+import School from "../../components/school"
+
 export default {
+    components:{School},
     data(){
         return{
             form:{
@@ -219,45 +202,23 @@ export default {
             console.log(val)
             this.form.pageSize=val
             this.form.pageNum=1
-             this.getSchool()
+            this.init()
         },
         handleCurrentChange(val){
             this.form.pageNum=val
              this.init()
         },
-        handleSizeChange1(val){
-            console.log(val)
-            this.pageSize1=val
-            this.pageNum1=1
-             this.getSchool()
-        },
-        handleCurrentChange1(val){
-            this.pageNum1=val
-             this.getSchool()
-        },
-        getSchool(){//获取学校列表
-            this.$axios.post(this.$url+"mgSchool/list",{
-               managetId:this.userInfo.id,
-               schoolName:this.schoolStr,
-               pageNum:this.pageNum1,
-               pageSize:this.pageSize1
-           }).then(res=>{
-               if(res.code==100){
-                   this.gridData1=res.info.rows
-                   this.schooltotal=res.info.total   
-                //    this.getSite()                   
-               }
-           })
-        },
-        checkSchoolShow(){
-            // 显示学校列表
-            this.getSchool()
-            this.schoolshow=true
-        },
-        changeSchool(row){
-            this.form.schoolId=row.id
-            this.schoolName=row.name
+        changeToSchool(data){
+            console.log("选择学校")
+            console.log(data)
+            this.form.schoolId=data.id
+            this.schoolName=data.name
             this.schoolshow=false
+        },
+         checkSchoolShow(){
+            // 显示学校列表
+            // this.getSchool()
+            this.schoolshow=true
         },
         init(){
             let data={}
@@ -266,7 +227,7 @@ export default {
                 data.start=this.$untils.getDate(this.value1[0])
                 data.end=this.$untils.getDate(this.value1[1])
             }
-            this.$axios.post(this.$url+"mgSecurity/list",data).then(res=>{
+            this.$axios.post(this.$url+"mgDriver/list",data).then(res=>{
                 if(res.code==100){
                     this.list=res.info.rows
                     this.total=res.info.total
@@ -275,12 +236,41 @@ export default {
             
         },
         goAdd(){
-            this.$router.push({name:'securityInfo'})
+            this.$router.push({name:'driversInfo'})
         },
         lookDetails(row){
-            this.$router.push({name:'securityInfo',query:{id:row.id}})
+            this.$router.push({name:'driversInfo',query:{id:row.id}})
         },
-       
+       deleteDrivers(row){
+            this.$confirm('是否要删除司机：'+row.name+'?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    this.$axios.post(this.$url+"mgDriver/delete",{
+                        id:row.id
+                    }).then(res=>{
+                        if(res.code==100){
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                            this.init()
+                        }else if(res.code==250){
+                             this.$message({
+                                type: 'warning',
+                                message: res.mssg
+                            });
+                        }
+                    })
+               
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });          
+            }); 
+       }
     }
 }
 </script>

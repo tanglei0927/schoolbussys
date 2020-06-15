@@ -3,6 +3,7 @@
         <div class="searchbox cl">   
             <h3><span>筛选</span>
                 <el-button type="primary" @click="searchIndex()">搜索</el-button>
+                <el-button type="primary" @click="gof5()">清空</el-button>
             </h3>
            <!-- <div @click="yyshow=true">运营员：
                <span v-if="checkYy.length==0">全部</span>
@@ -99,7 +100,7 @@
                     width="55">
                 </el-table-column>
                 <el-table-column property="siteId" label="id" width="80"></el-table-column>
-                <el-table-column property="siteName" label="站点" ></el-table-column>
+                <el-table-column property="siteName" label="站点" ></el-table-column>               
             </el-table>
         </el-drawer>
 
@@ -194,6 +195,7 @@
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">查看详情</el-button>
                     <!-- <el-button type="text" size="small">编辑</el-button> -->
+                    <el-button type="text" @click="lookReport(scope.row)" size="small">安全报告</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -244,6 +246,13 @@ export default {
     created(){
         if(sessionStorage.userInfo){
             this.userInfo=JSON.parse(sessionStorage.userInfo)
+        }
+        console.log(this.$route)
+        if(this.$route.query.childId){
+            this.form.childrenId=this.$route.query.childId
+        }
+        if(this.$route.query.lineId){
+            this.form.lineId=this.$route.query.lineId
         }
         // this.getManeger()    
         this.getSchool()
@@ -358,6 +367,28 @@ export default {
                     })
                 }
             })
+        },
+        gof5(){
+            // 刷新
+            if(this.form.childrenId||this.form.lineId){
+                 this.$router.push({name:'run'})
+            }else{
+                this.form={
+                status:'',
+                lineType:'',
+                pageNum:1,
+                pageSize:10,
+                vehicleCard:'',
+                driverName:'',
+                securityName:'',
+             }
+             this.searchIndex()
+            }
+            
+        },
+          lookReport(row){
+            // 查看安全报告
+            this.$router.push({name:'report',query:{id:row.id}})
         },
     }
 }
