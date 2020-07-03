@@ -12,7 +12,7 @@
                  <span>{{schoolName?schoolName:'请选择'}}</span>
            </div>
             <el-form class="cl" ref="form" :model="form" label-width="100px">                
-                <el-form-item label="支付状态">
+               <!-- <el-form-item label="支付状态">
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="未支付" value="1"></el-option>
@@ -20,7 +20,7 @@
                         <el-option label="支付完成" value="3"></el-option>
                         <el-option label="支付失败" value="4"></el-option>
                     </el-select>
-                </el-form-item>  
+                </el-form-item>  -->
                 <!-- <el-form-item label="家长">
                   <el-input placeholder="请输入家长姓名" v-model="form.parentName"></el-input>
                 </el-form-item>  -->
@@ -43,7 +43,7 @@
         <div class="table">
             <h3 class="cl">
                 <span>请假列表</span>
-                <el-button type="success" @click="goAdd()" plain>添加</el-button>
+                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
             </h3>
              <el-table
                 :data="list"
@@ -74,10 +74,10 @@
                 </el-table-column>
                 <el-table-column
                 prop="type"
-                label="产品类型"
+                label="类型"
                 width="100">
                 <template slot-scope="scope">
-                    <p>{{scope.row.type==1?'早':(scope.row.type==2?'晚':'全包')}}</p>
+                    <p>{{scope.row.type==1?'早':(scope.row.type==2?'晚':'全天')}}</p>
                 </template>   
                 </el-table-column>                  
                 <el-table-column

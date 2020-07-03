@@ -104,7 +104,7 @@
               <el-dropdown-item>删除</el-dropdown-item>
             </el-dropdown-menu>-->
           <!-- </el-dropdown>  -->
-          <span>admin</span>
+          <span>{{userInfo.name}}</span>
           <span class="logout" @click="logOut()">退出登录</span>
         </el-header>
         
@@ -139,6 +139,8 @@ export default {
       this.activePath=activePath
       this.openeds[0]=activePath.split("-")[0]
     }
+	let userInfo=sessionStorage.userInfo
+	this.userInfo=JSON.parse(userInfo)
   },
   methods:{
     goRouter(pathName,index){

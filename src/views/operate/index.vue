@@ -84,7 +84,7 @@
                     <p>{{scope.row.teacherCertification==1?'有':'没有'}}</p>
                 </template>               
                 </el-table-column>
-                 <el-table-column
+              <!--   <el-table-column
                 prop="phone"
                 label="省市区"
                 width="150"
@@ -92,7 +92,7 @@
                  <template slot-scope="scope">
                     <p>{{(scope.row.province?scope.row.province.name:'')+(scope.row.city?scope.row.city.name:'')+(scope.row.area?scope.row.area.name:'')}}</p>
                 </template>                
-                </el-table-column>
+                </el-table-column> -->
                  <el-table-column
                 prop="detailAddress"
                 label="详细地址"

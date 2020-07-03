@@ -55,7 +55,7 @@
                 label="学校是否已录入"
                 width="150">
                     <template slot-scope="scope">
-                        <p>{{scope.row.status==0?'未录入':'已录入'}}</p>
+                        <p>{{scope.row.status==1?'已录入':'未录入'}}</p>
                     </template>
                 </el-table-column>               
                  <el-table-column

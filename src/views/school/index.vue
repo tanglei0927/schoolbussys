@@ -127,6 +127,7 @@
                 <el-table-column property="managerId" label="id" width="80"></el-table-column>
                 <el-table-column property="managerName" label="姓名" ></el-table-column>
             </el-table>
+			<el-button class="isaddbtn" @click="isChangeYY()" type="primary">确定</el-button>
         </el-drawer>
    </div> 
 </template>
@@ -163,7 +164,8 @@ export default {
          addShow:false,
          yyshow:false,
          gridData:[],
-         checkYy:[]
+         checkYy:[],
+		 checkYy2:[]
       }
    },
     created(){
@@ -186,8 +188,20 @@ export default {
        changeYylist(val){
             // 运营员多选
             console.log(val)
-            this.checkYy=val
+            this.checkYy2=val
         },
+		isChangeYY(){
+			// 确定运营员
+			if(this.checkYy2.length==0){
+				this.$message({
+					message:"请选中运营员",
+					type:"warning"
+				})
+			}else{
+				this.checkYy=this.checkYy2
+				this.yyshow=false
+			}
+		},
        getmaneger(){
           this.$axios.post(this.$url+"mgManager/managerList",{
                managerId:this.userInfo.id
@@ -473,5 +487,8 @@ export default {
             }
          }
       }
+   }
+   .isaddbtn{
+	   margin:20px ;
    }
 </style>

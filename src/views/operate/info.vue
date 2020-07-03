@@ -64,7 +64,7 @@
                     </el-radio-group>
                     <span v-else>{{form.isSuperAccount==1?'有':'没有'}}</span>
                 </el-form-item>
-                <el-form-item label="省、市、区" v-if="userInfo.isSuperAccount!=1" class="address">
+           <!--     <el-form-item label="省、市、区" v-if="userInfo.isSuperAccount!=1" class="address">
                     <el-select v-model="form.province.code" placeholder="请选择省份" @change="changeProvince">
                         <el-option v-for="(item,index) in provinceList" :label="item.label" :value="item.value"></el-option>                  
                     </el-select> 
@@ -74,7 +74,7 @@
                     <el-select v-model="form.area.code" placeholder="请选择区域" @change="changeArea">
                         <el-option v-for="(item,index) in areaList" :label="item.label" :value="item.value"></el-option>                  
                     </el-select> 
-                </el-form-item>                               
+                </el-form-item>    -->                           
                  <el-form-item label="详细地址">
                     <el-input v-if="isEdit" v-model="form.detailAddress"></el-input>
                     <span v-else>{{form.detailAddress}}</span>
@@ -112,7 +112,7 @@
                 <el-button v-else type="warning" @click="isEdit=true" plain>修改</el-button>
                 <el-button v-if="isEdit" type="primary" @click="isEdit=false" plain>取消</el-button>
                 <el-button v-else type="primary" @click="goBack()" plain>返回</el-button>
-                <el-button type="warning" @click="showDraw=true" plain>添加学校</el-button>
+                <el-button type="warning" v-if="isUpdate" @click="showDraw=true" plain>添加学校</el-button>
             </div>
         </div>
         <School :show="showDraw" @changeToSchool="changeToSchool" />
@@ -157,7 +157,8 @@ export default {
              provinceList:[],
             cityList:[],
             areaList:[],
-            value1:''
+            value1:'',
+			isUpdate:false,
         }
     },
     created(){
@@ -168,6 +169,7 @@ export default {
             this.id=this.$route.query.id
             this.isEdit=false
             this.init()
+			this.isUpdate=true
         }else{
             this.title="添加"
             this.isEdit=true
@@ -230,14 +232,31 @@ export default {
                 }
                 console.log(data)
                 this.$axios.post(this.$url+reqUrl,data,'application/json').then(res=>{
-                    if(res.code==100){
-                        this.$message({
-                            type:"success",
-                            message:tsMsg+"成功！"
-                        })
+                    if(res.code==100){                       
                         if(!data.id){
-                            this.goBack()
+                            // this.goBack()
+							// 添加成功，提示去添加学校 info
+							  this.$confirm('添加成功，前去添加学校?', '提示', {
+							          confirmButtonText: '确定',
+							          cancelButtonText: '取消',
+							          type: 'warning'
+							        }).then(() => {
+							          this.id=res.info
+									  this.showDraw=true
+							        }).catch(() => {
+							          this.$message({
+							            type: 'info',
+							            message: '已取消！'
+							          });          
+									  setTimeout(()=>{
+										  this.goBack()
+									  },1000)
+							        });
                         }else{
+							this.$message({
+							    type:"success",
+							    message:tsMsg+"成功！"
+							})
                             this.isEdit=false
                             this.init()
                         }
