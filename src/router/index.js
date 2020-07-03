@@ -158,6 +158,21 @@ Vue.use(VueRouter)
         path:"/msginfo",
         name:"msginfo",
         component:()=> import('../views/msg/info.vue')
+      },
+      {
+        path:"/feedback",
+        name:'feedback',
+        component:()=> import('../views/feedback/index.vue')
+      },
+      {
+        path:"/operate",
+        name:'operate',
+        component:()=> import('../views/operate/index.vue')
+      },
+      {
+        path:"/operateInfo",
+        name:'operateInfo',
+        component:()=> import('../views/operate/info.vue')
       }
     ]
   },

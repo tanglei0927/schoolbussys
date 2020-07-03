@@ -77,7 +77,19 @@
             <el-menu-item-group>
               <el-menu-item index="10-1" @click="goRouter('msg','10-1')">消息管理</el-menu-item>
             </el-menu-item-group>            
-          </el-submenu>          
+          </el-submenu>  
+          <el-submenu index="11">
+            <template slot="title"><i class="iconfont icon-ziyuan1"></i>信息反馈</template>
+            <el-menu-item-group>
+              <el-menu-item index="11-1" @click="goRouter('feedback','11-1')">信息反馈</el-menu-item>
+            </el-menu-item-group>            
+          </el-submenu>  
+          <el-submenu index="12">
+            <template slot="title"><i class="iconfont icon-customer"></i>运营员管理</template>
+            <el-menu-item-group>
+              <el-menu-item index="12-1"  @click="goRouter('operate','5-1')">运营员管理</el-menu-item>
+            </el-menu-item-group>            
+          </el-submenu>        
         </el-menu>
       </el-aside>
       
@@ -93,6 +105,7 @@
             </el-dropdown-menu>-->
           <!-- </el-dropdown>  -->
           <span>admin</span>
+          <span class="logout" @click="logOut()">退出登录</span>
         </el-header>
         
         <el-main>
@@ -132,6 +145,10 @@ export default {
       this.$router.push({name:pathName})
       // 存session 进入页面默认高亮
       sessionStorage.activePath=index
+    },
+    logOut(){
+      sessionStorage.removeItem('userInfo')
+      this.$router.push({name:'login'})
     },
   },
   beforeRouteUpdate (to, from, next) {
@@ -215,6 +232,15 @@ export default {
           sessionStorage.activePath='10-1'
           this.activePath='10-1'
           break    
+      case 'feedback':
+          sessionStorage.activePath='11-1'
+          this.activePath='11-1'
+          break  
+      case 'operate':
+      case 'operateInfo':
+          sessionStorage.activePath='12-1'
+          this.activePath='12-1'
+          break  
     }
     next()
   }
@@ -240,7 +266,7 @@ export default {
    .el-header{
      position: fixed;
      top: 0;
-     z-index: 1;
+     z-index: 1000;
      width: 100%;
     //  left:;
      h3{
@@ -249,5 +275,9 @@ export default {
        letter-spacing: 5px;
        font-size: 20px;
      }
+   }
+   .logout{
+     padding: 0 10px;
+     margin-left: 10px;
    }
 </style> 

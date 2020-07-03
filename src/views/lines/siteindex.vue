@@ -18,7 +18,7 @@
          <el-table
                 :data="listData"
                 border
-                style="width: 100%">
+                style="width: 800px">
                 <el-table-column
                 prop="id"
                 label="id"

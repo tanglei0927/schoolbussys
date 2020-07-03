@@ -2,7 +2,7 @@
      <div>
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ name: 'index' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'security' }">安全员管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'operate' }">运营员管理</el-breadcrumb-item>
             <el-breadcrumb-item >{{title}}</el-breadcrumb-item>
         </el-breadcrumb>
         <div>
@@ -18,33 +18,23 @@
                     </el-select>
                     <span v-else>{{form.sex==1?'男':'女'}}</span>
                 </el-form-item>
+                <el-form-item label="年龄">
+                    <el-input v-model="form.age" v-if="isEdit"></el-input>
+                    <span v-else>{{form.age}}</span>
+                </el-form-item>
                 <el-form-item label="身份证号">
                     <el-input v-model="form.idCard" v-if="isEdit"></el-input>
                     <span v-else>{{form.idCard}}</span>
-                </el-form-item>                 
-                <el-form-item label="所属学校">
-                    <span style="margin-right:20px;">{{form.schoolName}}</span>
-                    <el-button v-if="isEdit" type="warning" @click="showDraw=true" plain>选择学校</el-button>
-                    <!-- <span v-else>{{form.ascription==1?'学校':(form.ascription==2?'个人':'')}}</span> -->
-                </el-form-item>
-                <el-form-item label="出生日期">
-                    <el-date-picker
-                        v-if="isEdit"
-                        v-model="value1"
-                        type="date"
-                        placeholder="选择日期">
-                    </el-date-picker>
-                    <span v-else>{{form.birthday}}</span>
                 </el-form-item>
                 <el-form-item label="学历">
                      <el-select v-if="isEdit"  v-model="form.education" placeholder="请选择学历">
-                        <el-option value="小学"></el-option>
-                        <el-option value="初中"></el-option>
-                        <el-option value="高中"></el-option>
-                        <el-option value="大专"></el-option>
-                        <el-option value="本科"></el-option>
-                        <el-option value="硕士"></el-option>
-                        <el-option value="博士"></el-option>
+                        <el-option :value="'小学'"></el-option>
+                        <el-option :value="'初中'"></el-option>
+                        <el-option :value="'高中'"></el-option>
+                        <el-option :value="'大专'"></el-option>
+                        <el-option :value="'本科'"></el-option>
+                        <el-option :value="'硕士'"></el-option>
+                        <el-option :value="'博士'"></el-option>
                     </el-select>
                     <span v-else>{{form.education}}</span>
                 </el-form-item>
@@ -59,7 +49,7 @@
                  <el-form-item label="紧急联系人电话">
                     <el-input v-if="isEdit" v-model="form.emergencyContactPhone"></el-input>
                     <span v-else>{{form.emergencyContactPhone}}</span>
-                </el-form-item>
+                </el-form-item> 
                 <el-form-item label="是否有教师资格证">
                     <el-radio-group v-if="isEdit" v-model="form.teacherCertification">
                         <el-radio :label="1">有</el-radio>
@@ -67,7 +57,14 @@
                     </el-radio-group>
                     <span v-else>{{form.teacherCertification==1?'有':'没有'}}</span>
                 </el-form-item>
-                <el-form-item label="省、市、区" class="address">
+                <el-form-item label="是否是超级账号">
+                    <el-radio-group v-if="isEdit" v-model="form.isSuperAccount">
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="0">不是</el-radio>
+                    </el-radio-group>
+                    <span v-else>{{form.isSuperAccount==1?'有':'没有'}}</span>
+                </el-form-item>
+                <el-form-item label="省、市、区" v-if="userInfo.isSuperAccount!=1" class="address">
                     <el-select v-model="form.province.code" placeholder="请选择省份" @change="changeProvince">
                         <el-option v-for="(item,index) in provinceList" :label="item.label" :value="item.value"></el-option>                  
                     </el-select> 
@@ -77,19 +74,10 @@
                     <el-select v-model="form.area.code" placeholder="请选择区域" @change="changeArea">
                         <el-option v-for="(item,index) in areaList" :label="item.label" :value="item.value"></el-option>                  
                     </el-select> 
-                    <!-- <span v-else>{{form.compulsoryInsurance==1?'有':'没有'}}</span> -->
-                </el-form-item>
-                 <el-form-item label="街道">
-                    <el-input v-if="isEdit" v-model="form.street"></el-input>
-                    <span v-else>{{form.street}}</span>
-                </el-form-item>
-                <el-form-item label="小区">
-                    <el-input v-if="isEdit" v-model="form.village"></el-input>
-                    <span v-else>{{form.village}}</span>
-                </el-form-item>
-                <el-form-item label="门牌号">
-                    <el-input v-if="isEdit" v-model="form.houseNumber"></el-input>
-                    <span v-else>{{form.houseNumber}}</span>
+                </el-form-item>                               
+                 <el-form-item label="详细地址">
+                    <el-input v-if="isEdit" v-model="form.detailAddress"></el-input>
+                    <span v-else>{{form.detailAddress}}</span>
                 </el-form-item>
                 <el-form-item label="是否禁用">
                     <el-radio-group v-if="isEdit"  v-model="form.isForbidden">
@@ -107,7 +95,7 @@
                     <span v-else>{{form.password}}</span>
                 </el-form-item>
                  <el-form-item class="uplaodbox" label="头像">
-                     <img v-if="form.photo" :src="$url+'file/readFile/'+form.photo" alt="">
+                     <img v-if="form.headUrl" :src="$url+'file/readFile/'+form.headUrl" alt="">
                     <el-upload
                         :action="$url+'file/uploadFile'"
                         list-type="picture-card"
@@ -124,6 +112,7 @@
                 <el-button v-else type="warning" @click="isEdit=true" plain>修改</el-button>
                 <el-button v-if="isEdit" type="primary" @click="isEdit=false" plain>取消</el-button>
                 <el-button v-else type="primary" @click="goBack()" plain>返回</el-button>
+                <el-button type="warning" @click="showDraw=true" plain>添加学校</el-button>
             </div>
         </div>
         <School :show="showDraw" @changeToSchool="changeToSchool" />
@@ -146,11 +135,12 @@ export default {
             form:{
                 name:'',
                 sex:"",
-                birthday:'',
+                age:"",
                 idCard:'',
                 teacherCertification:1,
+                isSuperAccount:1,
                 isForbidden:0,
-                photo:'',
+                headUrl:'',
                 province:{
                     name:'',
                     code:null
@@ -174,7 +164,7 @@ export default {
        this.provinceList=province
         this.userInfo=JSON.parse(sessionStorage.userInfo)
         if(this.$route.query.id){
-            this.title="安全员详情"
+            this.title="运营员详情"
             this.id=this.$route.query.id
             this.isEdit=false
             this.init()
@@ -186,18 +176,30 @@ export default {
     methods:{
         changeToSchool(data){
             console.log("选择学校")
-            console.log(data)
-            this.form.schoolId=data.id
-            this.form.schoolName=data.name
+            console.log(data)            
             this.showDraw=false
+            if(data.id){
+                this.$axios.post(this.$url+"mgManager/addSchool",{
+                    managerId:this.id,
+                    schoolId:data.id
+                }).then(res=>{
+                    if(res.code==100){
+                        this.$message({
+                            message:"添加成功！",
+                            type:"success"
+                        })
+                    }
+                })
+            }
+           
         },
         goBack(){
-            this.$router.push({name:'security'})
+            this.$router.push({name:'operate'})
         },
          upSuccess(res){
             // 图片上传成功
             console.log(res)
-            this.form.photo=res.info
+            this.form.headUrl=res.info
         },
         submitInfo(){
             console.log("添加，修改")
@@ -214,14 +216,14 @@ export default {
                     type:"warning",
                     message:'紧急联系人电话号码格式不正确'
                 })
-            }else if(!data.account||!data.password||!data.photo||!data.idCard||!data.schoolId){
+            }else if(!data.account||!data.password||!data.headUrl||!data.idCard){
                 this.$message({
                     type:"warning",
                     message:'请完善信息'
                 })
             }else{
                 let reqUrl=""
-                reqUrl=data.id?"mgSecurity/update":"mgSecurity/add"
+                reqUrl=data.id?"mgManager/update":"mgManager/add"
                 let tsMsg=data.id?'修改':'添加'
                 if(this.value1){
                      data.birthday=this.$untils.getDate(this.value1)
@@ -249,12 +251,27 @@ export default {
             }
         },
        init(){
-           this.$axios.post(this.$url+"mgSecurity/detail",{id:this.id}).then(res=>{
+           this.$axios.post(this.$url+"mgManager/detail",{managerId:this.id}).then(res=>{
                if(res.code==100){
+                    console.log("少时诵诗22222书")
                    this.form=res.info
-                    this.changeProvince(this.form.province.code,true)
-                    this.changeCity(this.form.city.code,true)
-                    this.value1=this.form.birthday
+                   let codeP=null
+                   codeP=res.info.province.code?res.info.province.code:''
+                   let codeC=null
+                   codeC=res.info.city.code?res.info.city.code:''
+                   if(codeP){
+                      this.changeProvince(this.form.province.code,true)
+                   }else{
+                    //    this.form.province.code=10
+                    //    this.form.province.name=""
+                    //    this.form.city.code=1001
+                    //    this.form.city.name=""
+                    //    this.form.area.code=10011
+                    //    this.form.area.name=""
+                   }
+                    if(codeC){
+                        this.changeCity(this.form.city.code,true)
+                    }
                }
            })
        },

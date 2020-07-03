@@ -137,7 +137,7 @@
                  <el-table-column
                 fixed="right"
                 label="操作"
-                width="100">
+                >
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">详情</el-button>
                     <el-button @click="changeExamine(scope.row)" type="text" size="small">审核</el-button>

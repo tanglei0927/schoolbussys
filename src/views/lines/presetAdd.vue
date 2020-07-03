@@ -251,7 +251,7 @@ export default {
         init(){
             this.$axios.post(this.$url+"mgProduct/detail",{id:this.id}).then(res=>{
                 if(res.code==100){
-                    let data=res.inf                    
+                    let data=res.info                   
                     this.form=data
                     this.sites=data.sites
                 }

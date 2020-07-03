@@ -64,7 +64,7 @@
                 <el-table-column
                 prop="address"
                 label="详细地址"
-                width="200">
+                >
                 </el-table-column>           
                 <el-table-column
                 prop="createTime"
