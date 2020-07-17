@@ -18,7 +18,7 @@
          <el-table
                 :data="listData"
                 border
-                style="width: 800px">
+                style="width: 900px">
                 <el-table-column
                 prop="id"
                 label="id"
@@ -45,7 +45,7 @@
                 <el-table-column
                 fixed="right"
                 label="操作"
-                width="100">
+                width="200">
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row.id)" type="text" size="small">查看详情</el-button>
                     <el-button type="text" @click="changeSite(scope.row)" size="small">修改站点</el-button>

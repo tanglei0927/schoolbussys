@@ -51,12 +51,12 @@
                  <el-table-column
                 prop="province"
                 label="省份"
-                width="150">
+                width="100">
                 </el-table-column>   
                 <el-table-column
                 prop="province"
                 label="城市区域"
-                width="200">
+                width="150">
                 <template slot-scope="scope">
                      <p>{{scope.row.city+" "+scope.row.area}}</p>
                 </template>

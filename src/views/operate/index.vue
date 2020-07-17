@@ -213,5 +213,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.el-table{
+	img{
+		width: 50px;
+	}
+}
 </style>

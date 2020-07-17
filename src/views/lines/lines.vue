@@ -159,6 +159,8 @@ export default {
         return{
             form:{
                 type:1,
+				name:'',
+				isDelete:0,
             },
             schoolName:"",
             pageNum:1,

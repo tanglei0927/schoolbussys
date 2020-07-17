@@ -173,7 +173,12 @@ Vue.use(VueRouter)
         path:"/operateInfo",
         name:'operateInfo',
         component:()=> import('../views/operate/info.vue')
-      }
+      },
+	  {//设备管理
+		 path:"/equipment",
+		 name:'equipment',
+		 component:()=> import('../views/equipment/index.vue')
+	  }
     ]
   },
   {

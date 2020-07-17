@@ -7,7 +7,7 @@
          </el-breadcrumb>
          <div>
              <div @click="checkSchool()">
-                 <p>学校：<span>{{form.schoolName}}</span></p>
+                 <p>学校：<span v-if="form.schoolName">{{form.schoolName}}</span> <span v-else style="color: #0D9BF2;">选择学校</span> </p>
              </div>
             <el-form ref="form" :model="form" label-width="100px">
                 <!-- <el-form-item label="学校:"> -->
@@ -295,11 +295,11 @@ export default {
                             type: 'success'
                         })
 
-                        if(!this.id){
+                        // if(!this.id){
                             this.$router.push({
                                 name:'preset'
                             })
-                        }
+                        // }
                     }
                     // else{
 

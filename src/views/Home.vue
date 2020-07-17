@@ -41,7 +41,7 @@
           <el-submenu index="4">
             <template slot="title"><i class="iconfont icon-ziyuan"></i>资源管理</template>
             <el-menu-item-group>
-              <el-menu-item index="4-1">设备管理</el-menu-item>
+              <el-menu-item index="4-1" @click="goRouter('equipment','4-1')">设备管理</el-menu-item>
               <el-menu-item index="4-2"  @click="goRouter('car','4-2')">车辆管理</el-menu-item>
               <el-menu-item index="4-3"  @click="goRouter('security','4-3')">安全员管理</el-menu-item>
               <el-menu-item index="4-4"  @click="goRouter('drivers','4-4')">司机管理</el-menu-item>
@@ -140,7 +140,11 @@ export default {
       this.openeds[0]=activePath.split("-")[0]
     }
 	let userInfo=sessionStorage.userInfo
-	this.userInfo=JSON.parse(userInfo)
+	if(userInfo){
+		this.userInfo=JSON.parse(userInfo)
+	}else{
+		this.$router.push({name:'login'})
+	}
   },
   methods:{
     goRouter(pathName,index){
@@ -243,6 +247,10 @@ export default {
           sessionStorage.activePath='12-1'
           this.activePath='12-1'
           break  
+	case 'equipment':
+	    sessionStorage.activePath='4-1'
+	    this.activePath='4-1'
+	    break 
     }
     next()
   }

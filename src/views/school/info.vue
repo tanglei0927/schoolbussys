@@ -10,14 +10,14 @@
            <ul>
               <li>
                  <span>学校ID：{{form.school.id}}</span>
-                 <span class="schoolname">学校名：{{form.school.name}}</span>
+                 <span class="schoolname">学校名：</span>{{form.school.name}}
               </li>
               <li>
                  <!-- <div><span>报名总数：</span></div>  -->
-                 <div><span>创建时间：{{form.school.createTime?form.school.createTime:''}}</span></div>
+                 <div><span>创建时间：</span>{{form.school.createTime?form.school.createTime:''}}</div>
               </li>
               <li class="cl">
-                 <span>学校地址：{{form.school.address}}</span>
+                 <span>学校地址：</span>{{form.school.address}}
                   <el-button type="warning" @click="getUpdateMsg()">编辑</el-button>
               </li>
            </ul>

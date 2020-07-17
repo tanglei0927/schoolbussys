@@ -101,7 +101,8 @@
                 label="头像"
                 width="150"> 
                 <template slot-scope="scope">
-                    <img :src="$url+'eaOss/download/'+scope.row.photo" alt="">
+                    <!-- <img :src="$url+'eaOss/download/'+scope.row.photo" alt=""> -->
+					<img :src="scope.row.photo" mode=""></img>
                 </template> 
                 </el-table-column>  
                 <el-table-column

@@ -207,7 +207,7 @@ export default {
 <style lang="scss" scoped>
 .uplaodbox{
     img{
-        width:150px;
+        width:350px;
         // height:150px;
         float: left;
     }

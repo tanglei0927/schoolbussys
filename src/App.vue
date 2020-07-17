@@ -79,6 +79,9 @@ export default {
           }
         }
     }
+	.el-form-item{
+		// margin-bottom: 20px !important;
+	}
 }
 .el-breadcrumb {
   margin-bottom: 20px;
@@ -157,4 +160,10 @@ export default {
         margin: 20px;
       }
     }
+	.el-form-item{
+		margin-bottom: 0px !important;
+		.el-input,.el-button,.el-upload,.el-textarea{
+			margin-bottom: 20px;
+		}
+	}
 </style>

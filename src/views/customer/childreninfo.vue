@@ -13,7 +13,7 @@
                 </el-form-item>
                  <el-form-item label="家长">
                     <!-- <el-input v-model="form.prentName" v-if="isEdit"></el-input> -->
-                    <span>{{form.prentName}}</span>
+                    <span>{{form.parentName}}</span>
                 </el-form-item>
                 <el-form-item label="性别">
                     <el-radio-group v-if="isEdit" v-model="form.sex">
@@ -23,7 +23,7 @@
                     <span v-else>{{form.sex==1?'男':'女'}}</span>
                 </el-form-item>
                 <el-form-item label="学校">
-                    <span style="margin-right:20px;">{{form.schoolNmae}}</span>
+                    <span style="margin-right:20px;">{{form.schoolName}}</span>
                     <!-- <el-button v-if="isEdit" type="warning" @click="showDraw=true" plain>选择学校</el-button> -->
                     <!-- <span v-else>{{form.ascription==1?'学校':(form.ascription==2?'个人':'')}}</span> -->
                 </el-form-item>
@@ -55,10 +55,10 @@
                      <span>{{form.siteName}}</span>
                 </el-form-item>
                  <el-form-item label="产品ID">
-                    <span >{{productInfo.productId}}</span>
+                    <span >{{form.productId}}</span>
                 </el-form-item>
                  <el-form-item label="产品名称">
-                    <span >{{productInfo.productName}}</span>
+                    <span >{{form.productName}}</span>
                 </el-form-item>
                  <el-form-item label="产品类型">
                     <span >{{productInfo.productType==1?'早':(productInfo.productType==2?'晚':'全包')}}</span>

@@ -102,7 +102,7 @@
                 label="头像"
                 width="150"> 
                 <template slot-scope="scope">
-                    <img :src="scope.row.photo" alt="">
+                    <img :src="$url+'eaOss/download/'+scope.row.photo" alt="">
                 </template> 
                 </el-table-column>  
                 <el-table-column
@@ -230,9 +230,10 @@ export default {
         color:#999;
     }
 }
-.el-table-column{
+.el-table{
     img{
         width: 100px;
+		// height: 100px;
     }
 }
 </style>

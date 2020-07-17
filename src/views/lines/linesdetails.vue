@@ -6,7 +6,7 @@
             <el-breadcrumb-item >线路详情</el-breadcrumb-item>
           </el-breadcrumb>
           <div>
-            <h3><span>线路站点</span>
+            <h3 class="headtit"><span>线路站点</span>
             <el-button type="success" @click="showMore=true" plain>{{sites.length==0?'添加站点':'修改站点'}}</el-button>
             </h3>
             <div v-if="!showMore">
@@ -18,6 +18,7 @@
                   <li v-for="(item,index) in sites">
                       <i @click="showSite(index)" class="el-icon-edit"></i>
                       <span>站点{{item.order}}：{{item.name}}</span>
+					  <p>上一站到本站所需时长：{{item.time}}分钟</p>
                       <i @click="deleteSite(index)" class="el-icon-error"></i>
                   </li>
                    
@@ -170,6 +171,8 @@
             <el-table  ref="yunyTable" :data="gridData2">
                 <el-table-column property="id" label="id" width="80"></el-table-column>
                 <el-table-column property="name" label="站点" ></el-table-column>
+                <!-- <el-table-column property="name" label="站点" > -->
+				<!-- </el-table-column> -->
                 <el-table-column property="name" label="操作">
                  <template slot-scope="scope">
                     <el-button @click="changeCheckSite(scope.row)" type="text" size="small">确定</el-button>
@@ -200,6 +203,11 @@
                 <el-table-column property="name" label="姓名" ></el-table-column>
                 <el-table-column property="grade" label="年级" ></el-table-column>
                 <el-table-column property="clazz" label="班级" ></el-table-column>
+                <el-table-column property="clazz" label="产品类型" >
+					<template slot-scope="scope">
+						<p>{{scope.row.productType==1?'早':(scope.row.productType==2?'晚':(scope.row.productType==3?'全天':''))}}</p>
+					</template>
+				</el-table-column>
                 <el-table-column property="name" label="操作">
                  <template slot-scope="scope">
                     <el-button @click="addChildToline(scope.row)" type="text" size="small">添加</el-button>
@@ -207,6 +215,14 @@
                 </el-table-column>
             </el-table>
         </el-drawer>
+		<!-- 时间显示弹框 -->
+		<div class="shadow" v-show="timeShow">
+			<div class="box timebox">
+				<h3><span>上一站到达此站时间（分钟）</span></h3>
+				<el-input v-model="time"></el-input>
+				<el-button  type="primary" @click="addTime()" size="small">确定</el-button>
+			</div>
+		</div>
       </div>
 </template>
 <script>
@@ -235,7 +251,10 @@ export default {
         gridData2:[],
         gridData3:[],
         siteIndex:false,
-        childShow:false
+        childShow:false,
+		time:'',
+		timeShow:false,
+		timeChangeId:null
       }
     },
     created(){
@@ -333,8 +352,10 @@ export default {
           })
       },
       showSite(index){
-          if(index){
+		  // console.log("修改2222222222")
+          if(index||index===0){
               this.siteIndex=index
+			  // console.log("修改")
           }else{
               this.siteIndex=null
           }
@@ -348,29 +369,41 @@ export default {
             this.sites=[]
             this.oldSite=[]
           }
-          if(this.siteIndex){
+          if(this.siteIndex||this.siteIndex===0){
               // 修改
+			  console.log("是否修改")
               this.sites[this.siteIndex].id=item.id
               this.sites[this.siteIndex].name=item.name
-          }else{                
-              // console.log("断点断点断点")
-              // let list=[]
+          }else{     
              let data={}
-              // if(this.sites){
-              //   list=this.sites
-              // }
               data.id=item.id
               data.name=item.name
-              data.order=this.sites.length+1              
+              data.order=this.sites.length+1   
+			  // data.time=0
               this.sites.push(data)
               if(this.sites.length==1){
                 this.checkSite=data
               }
               console.log(this.sites)
-
           }
-          this.siteShow=false            
+		  if(this.sites.length==1||this.siteIndex==0){
+			  this.sites[0].time=0
+		  }else{
+			  this.timeShow=true
+			  this.timeChangeId=item.id
+		  }
+          this.siteShow=false 
       },
+	  addTime(){
+		  // 给站点设定时间
+		  let list=this.sites
+		  list.forEach((item,index)=>{
+			  if(item.id==this.timeChangeId){
+				  item.time=this.time
+			  }
+		  })
+		  this.timeShow=false
+	  },
         deleteSite(index){
           // 根据下标删除选中的站点
           let list=this.sites
@@ -485,7 +518,7 @@ ul{
       margin: 10px;
         border: 1px dashed $borderColor;
         position: relative;
-        span{
+        span,p{
             font-size: 12px;
         }
         i{
@@ -512,5 +545,25 @@ ul{
     width: 200px;
     margin: 10px;
   }
+}
+.timebox{
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	width: 300px;
+	height: 180px;
+	text-align: center;
+	.el-input{
+		margin: 10px 0;
+	}
+	.el-button{
+		margin-top: 20px;
+		width: 150px;
+	}
+}
+.headtit{
+	margin-bottom: 20px;
 }
 </style>

@@ -57,7 +57,7 @@
                 <el-table-column
                 prop="tradeNo"
                 label="订单编号"
-                width="80">
+                width="150">
                 </el-table-column>
                 <el-table-column
                 prop="orderNo"
@@ -129,6 +129,7 @@
                 <el-table-column
                 prop="createTime"
                 label="创建时间"
+				width="150"
                 >                  
                 </el-table-column>
             </el-table>

@@ -65,7 +65,7 @@
                 label="上车信息"
                 width="150">
                  <template slot-scope="scope">
-                        <p>{{scope.row.boardTime+"在"+scope.row.boardSiteName+"站点上车"}}</p>
+                        <p>{{scope.row.boardTime?scope.row.boardTime+"在":''}}{{scope.row.boardSiteName?scope.row.boardSiteName+"站点上车":''}}</p>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -73,7 +73,7 @@
                 label="下车信息"
                 width="150">
                  <template slot-scope="scope">
-                        <p>{{scope.row.takeTime+"在"+scope.row.takeSiteName+"站点下车"}}</p>
+                        <p>{{scope.row.takeTime?scope.row.takeTime+"在":''}}{{scope.row.takeSiteName?scope.row.takeSiteName+"站点下车":''}}</p>
                     </template>
                 </el-table-column>
                  <el-table-column
@@ -82,9 +82,11 @@
                 width="100">
                     <template slot-scope="scope">
                         <p>
-                            <span v-if="scope.row.isAbnormal==1" style="color:red;">异常</span>
+                            <span v-if="scope.row.isAbnormal==1" style="color:red;">上车异常</span>
+                            <span v-if="scope.row.isAbnormal==2" style="color:red;">下车异常</span>
                             <span v-if="scope.row.isAbnormal==0" style="color:green;">无异常</span>
-                            <span v-if="scope.row.isAbnormal==2">请假</span>
+                            <span v-if="scope.row.isAbnormal==3">请假</span>
+                            <span v-if="scope.row.isAbnormal==4">行程异常</span>
                         </p>
                     </template>
                 </el-table-column>                 

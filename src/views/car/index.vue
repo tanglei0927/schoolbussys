@@ -328,4 +328,9 @@ export default {
         color:#999;
     }
 }
+.el-table{
+	img{
+		width: 100px;
+	}
+}
 </style>
