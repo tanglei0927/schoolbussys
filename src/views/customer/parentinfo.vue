@@ -15,7 +15,7 @@
                     <el-input v-if="isEdit" v-model="form.phone"></el-input>
                     <span v-else>{{form.phone}}</span>
                 </el-form-item>
-                <el-form-item label="关系">
+               <!-- <el-form-item label="关系">
                      <el-select  v-if="isEdit" v-model="form.relation" placeholder="请选择关系">
                         <el-option value="父亲"></el-option>
                         <el-option value="母亲"></el-option>
@@ -25,8 +25,8 @@
                         <el-option value="阿姨"></el-option>
                     </el-select>
                     <span v-else>{{form.relation}}</span>
-                </el-form-item>                
-                <el-form-item label="学历">
+                </el-form-item> -->               
+               <!-- <el-form-item label="学历">
                      <el-select v-if="isEdit"  v-model="form.education" placeholder="请选择学历">
                         <el-option value="小学"></el-option>
                         <el-option value="初中"></el-option>
@@ -37,7 +37,7 @@
                         <el-option value="博士"></el-option>
                     </el-select>
                     <span v-else>{{form.education}}</span>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="省、市、区" class="address">
                     <el-select v-model="form.province.code" placeholder="请选择省份" @change="changeProvince">
                         <el-option v-for="(item,index) in provinceList" :label="item.label" :value="item.value"></el-option>                  

@@ -280,4 +280,7 @@ export default {
         text-align: center;
     }
 }
+.searchbox{
+	padding-bottom: 20px;
+}
 </style>

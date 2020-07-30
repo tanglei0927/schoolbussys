@@ -86,6 +86,9 @@
                 prop="parentName"
                 label="家长"
                 width="100">
+					<template slot-scope="scope">
+						<p v-for="(item,index) in scope.row.relations">{{item.parentName}}{{item.relation?'('+item.relation+')':''}}</p>
+					</template> 
                 </el-table-column>
                 <el-table-column
                 prop="siteName"

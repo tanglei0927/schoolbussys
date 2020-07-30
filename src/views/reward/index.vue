@@ -12,7 +12,7 @@
                  <span>{{schoolName?schoolName:'请选择'}}</span>
            </div>
             <el-form class="cl" ref="form" :model="form" label-width="100px">                
-                <el-form-item label="支付状态">
+                <!-- <el-form-item label="支付状态">
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="未支付" value="1"></el-option>
@@ -20,7 +20,7 @@
                         <el-option label="支付完成" value="3"></el-option>
                         <el-option label="支付失败" value="4"></el-option>
                     </el-select>
-                </el-form-item>  
+                </el-form-item>  -->
                 <el-form-item label="购买的家长">
                   <el-input placeholder="请输入购买家长姓名" v-model="form.buyName"></el-input>
                 </el-form-item> 
@@ -35,15 +35,14 @@
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                 </el-date-picker>  
-                </el-form-item>  
-
+                </el-form-item>   
             </el-form>
         </div>
 
         <div class="table">
             <h3 class="cl">
                 <span>奖励列表</span>
-                <el-button type="success" @click="goAdd()" plain>添加</el-button>
+                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
             </h3>
              <el-table
                 :data="list"
@@ -89,24 +88,32 @@
                 label="分销人所得金额"
                 width="150">
                 </el-table-column>             
-                 <el-table-column
+                <!-- <el-table-column
                 prop="buyRecordName"
                 label="购买记录"
                 width="150">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                 prop="isDistribution"
                 label="是否已经分销"
-                width="100">
-                <template slot-scope="scope">
-                    <p>{{scope.row.isDistribution==1?'没有':'已分销'}}</p>
-                </template>   
+                width="110">
+					<template slot-scope="scope">
+						<p>{{scope.row.isDistribution==0?'未分销':'已分销'}}</p>
+					</template>   
                 </el-table-column>                      
                 <el-table-column
                 prop="createTime"
+				width="140"
                 label="创建时间"
                 >                  
                 </el-table-column>
+				<el-table-column
+				fixed="right"
+				label="操作">
+					<template slot-scope="scope">
+						<el-button @click="updateStaus(scope.row)" type="text" size="small">操作</el-button>
+					</template>
+				</el-table-column>
             </el-table>
             <div class="block">
                 <el-pagination
@@ -122,7 +129,21 @@
         </div>
 
         <School :show="schoolshow" @changeToSchool="changeToSchool" />
-
+		<div class="shadow" v-if="examineShow">
+		    <div class="exaboxs">
+		        <h3>更改分销状态
+		             <i @click="examineShow=false" class="el-icon-close"></i>
+		        </h3>
+		         <el-select v-model="examine" placeholder="请选择">
+		                <el-option label="未分销" :value="0"></el-option>
+		                <el-option label="已分销" :value="1"></el-option>
+		        </el-select>
+		        <div class="btns">
+		             <el-button type="success" @click="changeToE()" plain>确定</el-button>
+		             <el-button type="warning" @click="examineShow=false" plain>取消</el-button>
+		        </div>
+		    </div>
+		</div>
      </div>
 </template>
 <script>
@@ -141,7 +162,7 @@ export default {
                 start:"",
                 end:"",
                 buyName:'',
-                distributionName:''
+                distributionName:'',
             },
             value1:"",
             schoolshow:false,
@@ -153,7 +174,10 @@ export default {
             schoolName:'',
             userInfo:{},
             gridData1:[],
-            list:[]
+            list:[],
+			examineShow:false,
+			examine:'',
+			id:null
         }
     },
     created(){
@@ -201,7 +225,32 @@ export default {
             })
             
         },
-       
+       updateStaus(row){
+		   // 更改状态
+		   this.examineShow=true
+		   this.id=row.id
+		   this.examine=row.isDistribution
+	   },
+	   changeToE(){
+		   this.$axios.post(this.$url+"mgDistribution/isDistribution",{
+			   id:this.id,
+			   isDistribution:this.examine
+		   }).then(res=>{
+			   if(res.code==100){
+				   this.$message({
+					   type:"success",
+					   message:"修改成功"
+				   })
+				   this.examineShow=false
+				   this.init()
+			   }else if(res.code==250){
+				   this.$message({
+					   type:"warning",
+					   message:res.msg
+				   })
+			   }
+		   })
+	   }
     }
 }
 </script>
@@ -215,5 +264,17 @@ export default {
     span{
         color:#999;
     }
+}
+.exaboxs{
+	height: 200px;
+	width: 300px;
+	text-align: center;
+	.el-select{
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+}
+.searchbox{
+	padding-bottom: 20px;
 }
 </style>

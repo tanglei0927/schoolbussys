@@ -295,4 +295,7 @@ export default {
         color:#999;
     }
 }
+.searchbox{
+	padding-bottom: 20px;
+}
 </style>

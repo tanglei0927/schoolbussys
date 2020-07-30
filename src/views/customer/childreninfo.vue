@@ -147,7 +147,7 @@ export default {
                 })
             }else{
                 let reqUrl=""
-                data.birthDate=this.$untils.getDate(this.value1)
+                data.birthDate=this.$untils.getDate2(this.value1)
                 // data.closeDate=this.$untils.getDate(this.valueClose)
                 reqUrl=data.id?"mgChildren/update":"mgChildren/add"
                 let tsMsg=data.id?'修改':'添加'

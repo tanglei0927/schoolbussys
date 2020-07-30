@@ -21,7 +21,7 @@
         </div>
         <div class="searchbox cl">
             <h3><span>详情 &nbsp;&nbsp;{{" "+date}}</span>
-                <el-button type="primary" @click="showMore=!showMore">{{showMore?'收起更多':'查看更多'}}</el-button>
+                <!-- <el-button type="primary" @click="showMore=!showMore">{{showMore?'收起更多':'查看更多'}}</el-button> -->
             </h3>
             <div class="info cl">
                 <p><span>开始时间：</span>{{lineInfo.startTime}}</p>
@@ -33,7 +33,7 @@
                 <p><span>车牌号：</span>{{lineInfo.vehicleCard}}</p>
                 <p><span>司机名：</span>{{lineInfo.driverName}}</p>
                 <p><span>安全员名：</span>{{lineInfo.securityName}}</p>
-                <p><span>运营员名：</span>{{lineInfo.manager}}</p>
+                <!-- <p><span>运营员名：</span>{{lineInfo.manager}}</p> -->
             </div>
         </div>
         <!-- 学生列表 -->
@@ -76,30 +76,42 @@
                         <p>{{scope.row.takeTime?scope.row.takeTime+"在":''}}{{scope.row.takeSiteName?scope.row.takeSiteName+"站点下车":''}}</p>
                     </template>
                 </el-table-column>
-                 <el-table-column
-                prop="isAbnormal"
-                label="行程状态"
+               <!--  <el-table-column
+                prop="isInAbnormal"
+                label="上车行程"
                 width="100">
                     <template slot-scope="scope">
                         <p>
-                            <span v-if="scope.row.isAbnormal==1" style="color:red;">上车异常</span>
-                            <span v-if="scope.row.isAbnormal==2" style="color:red;">下车异常</span>
-                            <span v-if="scope.row.isAbnormal==0" style="color:green;">无异常</span>
-                            <span v-if="scope.row.isAbnormal==3">请假</span>
-                            <span v-if="scope.row.isAbnormal==4">行程异常</span>
+                            <span v-if="scope.row.isInAbnormal==1" style="color:red;">上车异常</span>
+                            <span v-if="scope.row.isInAbnormal==2" style="color:red;">未上车</span>
+                            <span v-if="scope.row.isInAbnormal==0" style="color:green;">无异常</span>
+                            <span v-if="scope.row.isInAbnormal==3">请假</span>
                         </p>
                     </template>
-                </el-table-column>                 
+                </el-table-column>     
+				<el-table-column
+				prop="isOutnAbnormal"
+				label="下车行程"
+				width="100">
+				    <template slot-scope="scope">
+				        <p>
+				            <span v-if="scope.row.isOutnAbnormal==1" style="color:red;">上车异常</span>
+				            <span v-if="scope.row.isOutnAbnormal==2" style="color:red;">未上车</span>
+				            <span v-if="scope.row.isOutnAbnormal==0" style="color:green;">无异常</span>
+				            <span v-if="scope.row.isOutnAbnormal==3">请假</span>
+				        </p>
+				    </template>
+				</el-table-column>  -->
                  <el-table-column
                 prop="status"
                 label="乘车状态"
-                width="100"  v-if="showMore">
+               >
                   <template slot-scope="scope">
                        <div>
                            <p v-if="scope.row.status==0">没问题</p>
                            <p v-if="scope.row.status==1" class="redtxt">打闹离座</p>
                            <p v-if="scope.row.status==2" class="redtxt">携带危险物品</p>
-                           <p v-if="scope.row.status==3">其他</p>
+                           <p v-if="scope.row.status==3">{{scope.row.otherReson}}</p>
                        </div>
                     </template>
                 </el-table-column>

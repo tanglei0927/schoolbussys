@@ -71,7 +71,7 @@
               <h3 class="cl">    
                <!-- <el-button type="primary" @click="addSchool()" icon="el-icon-s-claim">保存</el-button> -->
                <!-- <i class=""></i> -->
-               <span>添加学校</span>
+               <span>添加站点</span>
                 <i class="el-icon-close" @click="showAdd=false"></i>
             </h3>
              <el-form class="cl" ref="form" :model="info" label-width="100px">

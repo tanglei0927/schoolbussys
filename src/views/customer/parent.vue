@@ -27,7 +27,7 @@
         <div class="table">
             <h3 class="cl">
                 <span>家长列表</span>
-                <el-button type="success" @click="goAdd()" plain>添加</el-button>
+                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
             </h3>
              <el-table
                 :data="list"
@@ -43,11 +43,11 @@
                 label="姓名"
                 width="80">
                 </el-table-column>
-                <el-table-column
+               <!-- <el-table-column
                 prop="relation"
                 label="关系"
                 width="80">                  
-                </el-table-column>   
+                </el-table-column>  --> 
                 <el-table-column
                 prop="phone"
                 label="电话"

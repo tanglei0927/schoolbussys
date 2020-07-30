@@ -10,19 +10,26 @@
               <!-- <template slot="title">分组一</template> -->
               <el-menu-item index="1-1" @click="goRouter('index','1-1')">统计详情</el-menu-item>
               <el-menu-item index="1-2"  @click="goRouter('run','1-2')">运行详情</el-menu-item>
-            </el-menu-item-group>         
-            <!-- <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-            </el-submenu> -->
+            </el-menu-item-group>   
           </el-submenu>
+		  <el-submenu index="12">
+		    <template slot="title"><i class="iconfont icon-customer"></i>运营员管理</template>
+		    <el-menu-item-group>
+		      <el-menu-item index="12-1"  @click="goRouter('operate','5-1')">运营员管理</el-menu-item>
+		    </el-menu-item-group>            
+		  </el-submenu> 
           <el-submenu index="2">
             <template slot="title"><i class="iconfont icon-xuexiao"></i>学校管理</template>
             <el-menu-item-group>
               <el-menu-item index="2-1"  @click="goRouter('school','2-1')">学校管理</el-menu-item>
-            </el-menu-item-group>
-          
+            </el-menu-item-group>          
           </el-submenu>
+		  <el-submenu index="9">
+		    <template slot="title"><i class="iconfont icon-xiaoqu"></i>小区管理</template>
+		    <el-menu-item-group>
+		      <el-menu-item index="9-1" @click="goRouter('community','9-1')">小区管理</el-menu-item>
+		    </el-menu-item-group>            
+		  </el-submenu>
           <el-submenu index="3">
             <template slot="title"><i class="iconfont icon-xianlucanshu"></i>线路管理</template>
             <el-menu-item-group>
@@ -31,13 +38,7 @@
               <!-- <el-menu-item index="3-3">未知线路</el-menu-item> -->
               <el-menu-item index="3-3" @click="goRouter('lines','3-3')">正式线路</el-menu-item>
             </el-menu-item-group>            
-          </el-submenu>
-          <el-submenu index="9">
-            <template slot="title"><i class="iconfont icon-xiaoqu"></i>小区管理</template>
-            <el-menu-item-group>
-              <el-menu-item index="9-1" @click="goRouter('community','9-1')">小区管理</el-menu-item>
-            </el-menu-item-group>            
-          </el-submenu>
+          </el-submenu>         
           <el-submenu index="4">
             <template slot="title"><i class="iconfont icon-ziyuan"></i>资源管理</template>
             <el-menu-item-group>
@@ -84,18 +85,13 @@
               <el-menu-item index="11-1" @click="goRouter('feedback','11-1')">信息反馈</el-menu-item>
             </el-menu-item-group>            
           </el-submenu>  
-          <el-submenu index="12">
-            <template slot="title"><i class="iconfont icon-customer"></i>运营员管理</template>
-            <el-menu-item-group>
-              <el-menu-item index="12-1"  @click="goRouter('operate','5-1')">运营员管理</el-menu-item>
-            </el-menu-item-group>            
-          </el-submenu>        
+               
         </el-menu>
       </el-aside>
       
       <el-container>
         <el-header style="text-align: right;">
-          <h3>智享校车运营管理系统</h3>
+          <h3>智享校车后台管理系统</h3>
           <!-- <el-dropdown> -->
             <!-- <i class="el-icon-setting" style="margin-right: 15px"></i> -->
             <!-- <el-dropdown-menu slot="dropdown">

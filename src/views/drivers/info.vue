@@ -209,7 +209,7 @@ export default {
                 reqUrl=data.id?"mgDriver/update":"mgDriver/add"
                 let tsMsg=data.id?'修改':'添加'
                 if(this.value1){
-                     data.birthday=this.$untils.getDate(this.value1)
+                     data.birthday=this.$untils.getDate2(this.value1)
                 }
                 console.log(data)
                 this.$axios.post(this.$url+reqUrl,data,'application/json').then(res=>{

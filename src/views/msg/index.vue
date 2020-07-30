@@ -364,7 +364,8 @@ export default {
 }
 .addbox{
     width: 400px;
-    height: 300px;
+    height: 340px;
+	// top: 50px !important;
     .el-form{
         margin-top: 20px;
         .el-form-item{
@@ -378,5 +379,13 @@ export default {
     .btns{
         text-align: center;
     }
+}
+.searchbox{
+	padding: 20px 0;
+}
+.table{
+	h3{
+		margin-bottom: 20px;
+	}
 }
 </style>

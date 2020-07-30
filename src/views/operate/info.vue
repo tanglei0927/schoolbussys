@@ -105,8 +105,13 @@
                         <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
-
-            </el-form>
+			</el-form>
+			<div class="schoolbox">
+				<h3><span>归属学校</span></h3>
+				<div>
+					<span v-for="(item,index) in form.schools">{{item}}{{index!=form.schools.length?'，':''}}</span>
+				</div>
+			</div>
             <div class="btns">
                 <el-button v-if="isEdit" type="warning" @click="submitInfo()" plain>提交</el-button>
                 <el-button v-else type="warning" @click="isEdit=true" plain>修改</el-button>
@@ -395,5 +400,12 @@ export default {
         width: 150px;
         margin: 0 10px;
     }
+}
+.schoolbox{
+	margin-bottom: 60px;
+	div{
+		margin-top: 10px;
+		line-height: 30px;
+	}
 }
 </style>

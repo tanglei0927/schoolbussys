@@ -43,7 +43,7 @@
         <div class="table">
             <h3 class="cl">
                 <span>订单列表</span>
-                <el-button type="success" @click="goAdd()" plain>添加</el-button>
+                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
             </h3>
              <el-table
                 :data="list"
@@ -240,5 +240,8 @@ export default {
     span{
         color:#999;
     }
+}
+.searchbox{
+	padding-bottom: 20px;
 }
 </style>

@@ -33,6 +33,14 @@
                 label="密码"
                 width="100">
                 </el-table-column>
+				<el-table-column
+				prop="password"
+				label="归属学校"
+				width="200">
+					<template slot-scope="scope">
+						<span v-for="(item,index) in scope.row.schools"> {{item}}{{index!=scope.row.schools.length-1?'，':''}} </span>
+					</template>
+				</el-table-column>
                 <el-table-column
                 prop="idCard"
                 label="身份证"

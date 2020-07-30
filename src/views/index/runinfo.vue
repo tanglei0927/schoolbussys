@@ -11,11 +11,11 @@
            </div> -->
            <div @click="schoolshow=true">学校：
                <span v-if="checkSchool.length==0">全部</span>
-               <span v-for="(item,index) in checkSchool">{{item.name?item.name:''+" "}}</span>
+               <span v-for="(item,index) in checkSchool">{{item.name?item.name+(index==checkSchool.length-1?" ":'，'):''+" "}}</span>
            </div>
            <div @click="zdshow=true">途径站点：
                <span v-if="checkZd.length==0">全部</span>
-               <span v-for="(item,index) in checkZd">{{item.siteName+" "}}</span>
+               <span v-for="(item,index) in checkZd">{{item.siteName+(index==checkZd.length-1?" ":'，')}}</span>
            </div>
             <el-form class="cl"ref="form" :model="form" label-width="100px">
                 <el-form-item label="安全员：">
@@ -119,11 +119,11 @@
                 label="id"
                 width="80">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                 prop="manager"
                 label="运营员"
                 width="120">
-                </el-table-column>
+                </el-table-column> -->
                  <el-table-column
                 prop="lineName"
                 label="线路名"
@@ -320,6 +320,8 @@ export default {
         changeSchoollist(val){
             // 学校多选
             this.checkSchool=val
+			console.log("选择学校")
+			console.log(val)
         },
         changezdlist(val){
             this.checkZd=val
@@ -328,9 +330,12 @@ export default {
              let str=""
             list.forEach((item,index)=>{
                 let id=""
-                if(i==1){
+                if(i==1){					
                     id=item.managerId  //获取运营的id
-                }else{
+                }else if(i==2){
+					console.log("学校学校")
+					id=item.id
+				}else if(i==3){
                     console.log("站点站点")
                     id=item.siteId   //站点ID
                 }
@@ -370,6 +375,8 @@ export default {
         },
         gof5(){
             // 刷新
+			this.checkSchool=[]
+			this.checkZd=[]
             if(this.form.childrenId||this.form.lineId){
                  this.$router.push({name:'run'})
             }else{
