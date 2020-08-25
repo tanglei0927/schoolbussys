@@ -114,11 +114,11 @@
                 width="100">                  
                 </el-table-column>
                 <el-table-column
-                prop="yearlylnspection"
+                prop="yearlyInspection"
                 label="年检情况"
                 width="100">
-                  <template slot-scope="scope">
-                        <p>{{scope.row.yearlylnspection==1?'有':'没有'}}</p>
+                 <template slot-scope="scope">
+                        <p>{{scope.row.yearlyInspection==1?'有':'没有'}}</p>
                     </template>
                 </el-table-column>
                  <el-table-column

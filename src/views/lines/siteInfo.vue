@@ -52,7 +52,7 @@
             <div>
                 <el-input placeholder="请输入小区名称" v-model="getCom.name" class="zdinput"></el-input>
                 <el-button type="primary" @click="getCommunity()">搜索</el-button>
-                <!-- <el-button type="success" @click="getSite()">确定</el-button> -->
+                <el-button type="success" v-show="siteList.length>0" @click="getSite()">关联</el-button>
             </div>
             <el-table  ref="yunyTable" :data="commList" @selection-change="changexqlist">
                  <el-table-column
@@ -102,7 +102,8 @@ export default {
             },
             total:'',
             commList:[],
-            xqCheck:[]
+            xqCheck:[],
+			siteList:[]
         }
     },
     created(){
@@ -122,6 +123,7 @@ export default {
         },
         changexqlist(val){
             console.log(val)
+			this.siteList=val
         },
         init(){
             this.$axios.post(this.$url+"mgSite/detail",{
@@ -153,12 +155,25 @@ export default {
                 }
             })
         },
+		getSite(){
+			// 多选关联
+			let list=this.siteList
+			let siteIdList=[]
+			list.forEach((item,index)=>{
+				siteIdList.push(item.id)
+			})
+			this.gxXQ(siteIdList)
+		},
         gxXQ(id){
             // 关联小区
             console.log(id)
+			console.log(typeof(id))
+			if(typeof(id)=="object"){
+				id=id.join(",") 
+			}
             this.$axios.post(this.$url+"mgSite/streetAdd",{
                 siteId:this.id,
-                streetId:id
+                streetIds:id
             }).then(res=>{
                 if(res.code==100){
                      this.$message({

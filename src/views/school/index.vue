@@ -28,7 +28,7 @@
                <el-input placeholder="请输入学校名称" v-model="form.schoolName"></el-input>
             </el-form-item>
             <el-button type="primary" @click="searchIfo()">搜索</el-button>
-            <el-button type="warning" @click="showMore=!showMore">{{showMore?'收起更多':'查看更多'}}</el-button>
+            <!-- <el-button type="warning" @click="showMore=!showMore">{{showMore?'收起更多':'查看更多'}}</el-button> -->
             <el-button type="success" v-if="userInfo.isSuperAccount==1" @click="showAdd()">新增</el-button>
 
          </el-form>
@@ -119,6 +119,7 @@
             :visible.sync="yyshow"
             direction="rtl"
             size="30%">
+			<el-button class="isaddbtn" @click="isChangeYY()" type="primary">确定</el-button>
             <el-table  ref="yunyTable" :data="gridData" @selection-change="changeYylist">
                  <el-table-column
                     type="selection"
@@ -127,7 +128,6 @@
                 <el-table-column property="managerId" label="id" width="80"></el-table-column>
                 <el-table-column property="managerName" label="姓名" ></el-table-column>
             </el-table>
-			<el-button class="isaddbtn" @click="isChangeYY()" type="primary">确定</el-button>
         </el-drawer>
    </div> 
 </template>
@@ -169,7 +169,6 @@ export default {
       }
    },
     created(){
-      //  console.log(province)
        this.provinceList=province
        let userInfo=sessionStorage.userInfo
        userInfo=JSON.parse(userInfo)
@@ -236,15 +235,12 @@ export default {
          city.forEach((item,index)=>{
             let str=item[0].value
             str=str.substr(0,2)
-            // console.log(str)
             if(str==val){
-               // console.log(item)
                this.cityList=item
             }
          })
        },
-       changeCity(val){
-         //  this.areaList=[]  
+       changeCity(val){ 
          this.form.areaName=""
          this.form.areaCode=""
          this.cityList.forEach((item,index)=>{
@@ -257,9 +253,7 @@ export default {
             cityList.forEach((item2,index)=>{
                   let str=item2[0].value
                str=str.substr(0,4)
-               // console.log(str)
                if(str==val){
-                  // console.log(item)
                   this.areaList=item2
                }
             })
@@ -267,17 +261,14 @@ export default {
        },
        changeArea(val){
           console.log("选择区域")
-         //  console.log(val)
           area.forEach((item,index)=>{
             let cityList=item
             cityList.forEach((item2,index)=>{
-               // console.log(item2)
                let areaList=item2
                areaList.forEach((item3,index)=>{
                   if(item3.value==val){
                      console.log("区域")
                      this.form.areaName=item3.label  
-                     // return true
                   }  
                })                          
             })
@@ -490,5 +481,10 @@ export default {
    }
    .isaddbtn{
 	   margin:20px ;
+   }
+   .el-drawer{
+	   .el-button{
+		   float:right;
+	   }
    }
 </style>

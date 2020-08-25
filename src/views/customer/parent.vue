@@ -27,7 +27,7 @@
         <div class="table">
             <h3 class="cl">
                 <span>家长列表</span>
-                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
+                <el-button type="success" @click="exportExcel()" plain>导出</el-button>
             </h3>
              <el-table
                 :data="list"
@@ -42,6 +42,9 @@
                 prop="name"
                 label="姓名"
                 width="80">
+				<!-- 	<template slot-scope="scope">
+						<p>{{scope.row.name?scope.row.name:''}}</p>
+					</template> -->
                 </el-table-column>
                <!-- <el-table-column
                 prop="relation"
@@ -51,7 +54,7 @@
                 <el-table-column
                 prop="phone"
                 label="电话"
-                width="100">
+                width="110">
                 </el-table-column>
                 <el-table-column
                 prop="detailAddreee"
@@ -66,6 +69,11 @@
                 label="详细地址"
                 width="200">                  
                 </el-table-column> 
+				<el-table-column
+				prop="streetNmae"
+				label="小区"
+				width="200">                  
+				</el-table-column> 
                 <el-table-column
                 prop="detailAddreee"
                 label="头像"
@@ -138,11 +146,18 @@ export default {
         this.form.managerId=this.userInfo.id
         this.init()
     },
+	watch:{
+		list:function(newVal,oldVal){
+			console.log(newVal)
+			this.list=newVal
+		},
+		deep:true
+	},
     methods:{
         handleSizeChange(val){
             console.log(val)
             this.form.pageSize=val
-            this.form.pageNum=1
+            // this.form.pageNum=1
             this.init()
         },
         handleCurrentChange(val){
@@ -166,8 +181,15 @@ export default {
             data=this.form
             this.$axios.post(this.$url+"mgParent/list",data).then(res=>{
                 if(res.code==100){
-                    this.list=res.info.rows
+                    // this.list=res.info.rows
+					this.list=[]
+					let list=res.info.rows
                     this.total=res.info.total
+					list.forEach((item,index)=>{
+						if(item.name&&item.phone){
+							this.list.push(item)
+						}
+					})
                 }
             })
             
@@ -207,7 +229,60 @@ export default {
                     message: '已取消删除'
                 });          
             }); 
-       }
+       },
+	   exportExcel(){
+	   		  // 导出成excel表
+	   		  // 获取完整的数据
+	   		   const loading = this.$loading({
+	   			lock: true,
+	   			text: '正在加载数据，请稍等！',
+	   			spinner: 'el-icon-loading',
+	   			background: 'rgba(0, 0, 0, 0.7)'
+	   		  });
+	   		  let list=[]
+	   		 this.$axios.post(this.$url+"mgParent/list",{
+				pageNum:1, 
+				pageSize:this.total,
+				managerId:this.form.managerId,
+				schoolId:this.form.schoolId,
+				status:this.form.status,
+				start:this.form.start,
+				end:this.form.end
+			}).then(res=>{
+	   		    if(res.code==100){
+	   				loading.close();
+					let list2=[]
+	   				list2=res.info.rows	
+					list2.forEach((item,index)=>{
+						if(item.name&&item.phone){
+							list.push(item)
+						}
+					})
+					let str=""
+	   				list.forEach((item,index)=>{
+	   					item.cityAddress=''
+						item.cityAddress+=item.province.name?item.province.name:''
+						item.cityAddress+=item.city.name?item.city.name:''
+						item.cityAddress+=item.area.name?item.area.name:''
+	   				})
+	   				let exportloading = this.$loading({
+	   					lock: true,
+	   					text: '正在生成表格并导出，请稍等！',
+	   					spinner: 'el-icon-loading',
+	   					background: 'rgba(0, 0, 0, 0.7)'
+	   				});	
+	   				let { export_json_to_excel } = require('../../untils/export2Excel.js');
+	   				let tHeader = ['ID', '姓名', '电话','地址','详细地址','小区'];
+	   				let filterVal = ['id','name','phone','cityAddress','detailAddreee','streetNmae'];				
+	   				let data = this.formatJson(filterVal, list);
+	   				export_json_to_excel(tHeader, data, '家长');
+	   				exportloading.close();
+	   		    }
+	   		  })
+	   },
+	    formatJson(filterVal, jsonData) {
+	   		return jsonData.map(v => filterVal.map(j => v[j]))
+	   }
     }
 }
 </script>

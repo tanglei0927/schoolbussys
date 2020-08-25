@@ -16,9 +16,9 @@
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="未支付" value="1"></el-option>
-                        <el-option label="支付中" value="2"></el-option>
+                        <!-- <el-option label="支付中" value="2"></el-option> -->
                         <el-option label="支付完成" value="3"></el-option>
-                        <el-option label="支付失败" value="4"></el-option>
+                        <!-- <el-option label="支付失败" value="4"></el-option> -->
                     </el-select>
                 </el-form-item>  
                 <el-form-item label="家长">
@@ -27,7 +27,7 @@
                 <el-form-item label="学生">
                   <el-input placeholder="请输入学生姓名" v-model="form.childrenName"></el-input>
                 </el-form-item>     
-                <el-form-item label="时间:">
+                <el-form-item label="时间">
                 <el-date-picker
                     v-model="value1"
                     type="daterange"
@@ -36,14 +36,18 @@
                     end-placeholder="结束日期">
                 </el-date-picker>  
                 </el-form-item>  
-
+				<el-form-item label="预设线路">
+				    <el-select v-model="form.productId" placeholder="请选择">
+				        <el-option v-for="(item,index) in productList" :label="item.name" :value="item.id"></el-option>
+				    </el-select>
+				</el-form-item>  
             </el-form>
         </div>
 
         <div class="table">
             <h3 class="cl">
                 <span>订单列表</span>
-                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
+                <el-button type="success" @click="exportExcel()" plain>导出</el-button>
             </h3>
              <el-table
                 :data="list"
@@ -63,17 +67,22 @@
                 prop="orderNo"
                 label="微信支付流水号"
                 width="150">
-                </el-table-column>
-                <el-table-column
-                prop="phone"
-                label="电话"
-                width="110">
-                </el-table-column>                 
+                </el-table-column>                              
                 <el-table-column
                 prop="parentName"
                 label="家长姓名"
                 width="150">
                 </el-table-column>
+				<el-table-column
+				prop="streetName"
+				label="居住小区"
+				width="150">
+				</el-table-column>
+				<el-table-column
+				prop="phone"
+				label="电话"
+				width="110">
+				</el-table-column> 
                 <el-table-column
                 prop="childrenName"
                 label="学生姓名"
@@ -84,7 +93,7 @@
                 label="班级"
                 width="100">
                   <template slot-scope="scope">
-                    <p>{{scope.row.grade+"年级"+scope.row.clazz+"班"}}</p>
+                    <p>{{scope.row.grade>9?(scope.row.grade==10?'高一':'高二'):scope.row.grade+"年级"}}{{scope.row.clazz+"班"}}</p>
                 </template>
                 </el-table-column>
                 <el-table-column
@@ -118,7 +127,7 @@
                 </el-table-column>
                 <el-table-column
                 prop="stieName"
-                label="站点名称"
+                label="预设线路站点"
                 width="150"> 
                 </el-table-column>                
                  <el-table-column
@@ -166,7 +175,8 @@ export default {
                 start:"",
                 end:"",
                 parentName:'',
-                childrenName:''
+                childrenName:'',
+				productId:null
             },
             value1:"",
             schoolshow:false,
@@ -178,13 +188,15 @@ export default {
             schoolName:'',
             userInfo:{},
             gridData1:[],
-            list:[]
+            list:[],
+			productList:[]
         }
     },
     created(){
         this.userInfo=JSON.parse(sessionStorage.userInfo)
         this.form.managerId=this.userInfo.id
         this.init()
+		this.getProduct()
     },
     methods:{
         handleSizeChange(val){
@@ -226,7 +238,69 @@ export default {
             })
             
         },
-       
+       getProduct(){
+		   // 获取预设线路列表
+		   this.$axios.post(this.$url+'mgBuyRecord/productSimpleList',{
+			   managerId:this.form.managerId
+		   }).then(res=>{
+			   if(res.code==100){
+				   this.productList=res.info
+			   }
+		   })
+	   },
+	   exportExcel(){
+	   	  // 导出成excel表
+	   	  // 获取完整的数据
+	   	   const loading = this.$loading({
+	   			lock: true,
+	   			text: '正在加载数据，请稍等！',
+	   			spinner: 'el-icon-loading',
+	   			background: 'rgba(0, 0, 0, 0.7)'
+	   		});
+	   		  let list=[]
+			  let start=''
+			  let end=''
+			  if(this.value1){
+				  start=this.$untils.getDate(this.value1[0])
+				  end=this.$untils.getDate(this.value1[1])
+			  }
+	   		 this.$axios.post(this.$url+"mgBuyRecord/list",{
+	   				pageNum:1, 
+	   				pageSize:this.total,
+	   				managerId:this.form.managerId,
+	   				schoolId:this.form.schoolId,
+	   				status:this.form.status,
+	   				parentName:this.form.parentName,
+	   				childrenName:this.form.childrenName,
+	   				productId:this.form.productId,
+					start:start,
+					end:end
+	   			}).then(res=>{
+	   		    if(res.code==100){
+	   				loading.close();
+	   				list=res.info.rows								
+	   				list.forEach((item,index)=>{
+	   					item.type=item.type==1?'早':(item.type==2?'晚':item.type==3?'全包':'')	
+						item.state=item.state==1?'未支付':(item.state==2?'支付中':(item.state==3?'支付完成':'支付失败'))
+	   				})
+	   				let exportloading = this.$loading({
+	   					lock: true,
+	   					text: '正在生成表格并导出，请稍等！',
+	   					spinner: 'el-icon-loading',
+	   					background: 'rgba(0, 0, 0, 0.7)'
+	   				});	
+	   				let { export_json_to_excel } = require('../../untils/export2Excel.js');
+	   				let tHeader = ['ID', '订单编号', '微信支付流水号','家长姓名','居住小区','电话','学生姓名','年级','班级','价格','状态','产品ID','产品类型','预设线路站点','预设线路名称','创建时间'];
+	   				let filterVal = ['id','tradeNo','orderNo','parentName','streetName','phone','childrenName','grade','clazz','price','state','productId','type','stieName','name','createTime'];				
+	   				let data = this.formatJson(filterVal, list);
+	   				export_json_to_excel(tHeader, data, '订单');
+	   				exportloading.close();
+	   		    }
+	   		  })
+	   },
+	    formatJson(filterVal, jsonData) {
+	   		return jsonData.map(v => filterVal.map(j => v[j]))
+	   }
     }
 }
 </script>

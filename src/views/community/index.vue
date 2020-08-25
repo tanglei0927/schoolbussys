@@ -340,12 +340,13 @@ export default {
                         })
                         this.addShow=false
                         this.init()
-                    }else if(res.code==250){
-                         this.$message({
-                            message:res.msg,
-                            type:"warningt"
-                        })
                     }
+					// else if(res.code==250){
+     //                     this.$message({
+     //                        message:res.msg,
+     //                        type:"warning"
+     //                    })
+     //                }
                 })
             }
         }

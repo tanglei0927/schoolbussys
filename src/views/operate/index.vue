@@ -126,7 +126,7 @@
                     <p>{{scope.row.isSuperAccount==1?'是':'否'}}</p>
                 </template>          
                 </el-table-column>
-                 <el-table-column
+               <!--  <el-table-column
                 prop="phone"
                 label="头像"
                 width="150"
@@ -134,7 +134,7 @@
                 <template slot-scope="scope">
                     <img :src="$url+'file/readFile/'+scope.row.headUrl" alt="">
                 </template>            
-                </el-table-column>
+                </el-table-column> -->
                  <el-table-column
                 prop="phone"
                 label="电话"

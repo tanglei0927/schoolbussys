@@ -141,6 +141,51 @@
                     </el-select>
                 </el-form-item>                
              </el-form>
+			 <!-- <el-form class="cl"ref="form" :model="form" label-width="120px">
+			     <h3><span>防疫安全监督</span></h3>               
+			    <el-form-item label="车辆是否消毒：">
+			       <el-select disabled="" v-model="form.disinfectFirst" placeholder="暂无记录">
+			            <el-option label="合格" :value="0"></el-option>
+			            <el-option label="不合格" :value="1"></el-option>
+			        </el-select>
+			    </el-form-item>
+				<el-form-item label="车辆是否消毒：">
+				   <el-select disabled="" v-model="form.disinfectAfter" placeholder="暂无记录">
+				        <el-option label="合格" :value="0"></el-option>
+				        <el-option label="不合格" :value="1"></el-option>
+				    </el-select>
+				</el-form-item>
+			    <el-form-item label="发车前司机体温：">
+			       <el-select disabled="" v-model="form.driverTemperatureAfter" placeholder="暂无记录">
+			             <el-option label="合格" :value="0"></el-option>
+			            <el-option label="不合格" :value="1"></el-option>
+			        </el-select>
+			    </el-form-item>
+			    <el-form-item label="发车前安全员体温">
+			       <el-select disabled="" v-model="form.securityTemperatureFirst" placeholder="暂无记录">
+			            <el-option label="合格" :value="0"></el-option>
+			            <el-option label="不合格" :value="1"></el-option>
+			        </el-select>
+			    </el-form-item>
+				<el-form-item label="行驶中司机体温：">
+				   <el-select disabled="" v-model="form.driverTemperatureAfter" placeholder="暂无记录">
+				         <el-option label="合格" :value="0"></el-option>
+				        <el-option label="不合格" :value="1"></el-option>
+				    </el-select>
+				</el-form-item>
+				<el-form-item label="行驶中安全员体温">
+				   <el-select disabled="" v-model="form.securityTemperatureAfter" placeholder="暂无记录">
+				        <el-option label="合格" :value="0"></el-option>
+				        <el-option label="不合格" :value="1"></el-option>
+				    </el-select>
+				</el-form-item>
+			    <el-form-item label="学生体温是否正常：">
+			       <el-select disabled="" v-model="form.childrenTemperatureAfter" placeholder="暂无记录">
+			             <el-option label="合格" :value="0"></el-option>
+			            <el-option label="不合格" :value="1"></el-option>
+			        </el-select>
+			    </el-form-item>             
+			 </el-form> -->
         </div>
     </div>    
 </template>

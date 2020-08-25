@@ -52,7 +52,7 @@
                 label="班级"
                 width="120">
                     <template slot-scope="scope">
-                        <p>{{scope.row.grade+'年级'}}{{scope.row.clazz?scope.row.clazz+"班":''}}</p>
+                        <p>{{scope.row.grade>9?(scope.row.grade==10?'高一':'高二'):scope.row.grade+"年级"}}{{scope.row.clazz?scope.row.clazz+"班":''}}</p>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -75,33 +75,7 @@
                  <template slot-scope="scope">
                         <p>{{scope.row.takeTime?scope.row.takeTime+"在":''}}{{scope.row.takeSiteName?scope.row.takeSiteName+"站点下车":''}}</p>
                     </template>
-                </el-table-column>
-               <!--  <el-table-column
-                prop="isInAbnormal"
-                label="上车行程"
-                width="100">
-                    <template slot-scope="scope">
-                        <p>
-                            <span v-if="scope.row.isInAbnormal==1" style="color:red;">上车异常</span>
-                            <span v-if="scope.row.isInAbnormal==2" style="color:red;">未上车</span>
-                            <span v-if="scope.row.isInAbnormal==0" style="color:green;">无异常</span>
-                            <span v-if="scope.row.isInAbnormal==3">请假</span>
-                        </p>
-                    </template>
-                </el-table-column>     
-				<el-table-column
-				prop="isOutnAbnormal"
-				label="下车行程"
-				width="100">
-				    <template slot-scope="scope">
-				        <p>
-				            <span v-if="scope.row.isOutnAbnormal==1" style="color:red;">上车异常</span>
-				            <span v-if="scope.row.isOutnAbnormal==2" style="color:red;">未上车</span>
-				            <span v-if="scope.row.isOutnAbnormal==0" style="color:green;">无异常</span>
-				            <span v-if="scope.row.isOutnAbnormal==3">请假</span>
-				        </p>
-				    </template>
-				</el-table-column>  -->
+                </el-table-column>            
                  <el-table-column
                 prop="status"
                 label="乘车状态"
@@ -207,7 +181,7 @@ export default {
         },
         lookReport(row){
             // 查看安全报告
-            this.$router.push({name:'report',query:{id:row.id}})
+            this.$router.push({name:'report',query:{id:this.lineId}})
         },
     }
 }

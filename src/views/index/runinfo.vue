@@ -56,21 +56,7 @@
 
             </el-form>
             
-        </div>
-        <!-- <el-drawer
-            title="运营员列表"
-            :visible.sync="yyshow"
-            direction="rtl"
-            size="30%">
-            <el-table  ref="yunyTable" :data="gridData" @selection-change="changeYylist">
-                 <el-table-column
-                    type="selection"
-                    width="55">
-                </el-table-column>
-                <el-table-column property="managerId" label="id" width="80"></el-table-column>
-                <el-table-column property="managerName" label="姓名" ></el-table-column>
-            </el-table>
-        </el-drawer> -->
+        </div>  
         <el-drawer
             title="学校列表"
             :visible.sync="schoolshow"
@@ -159,12 +145,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                prop="securityName"
+                prop="vehicleCard"
                 label="车牌"
                 width="120" v-if="showMore">
                 </el-table-column>
                  <el-table-column
-                prop="securityName"
+                prop="driverName"
                 label="司机"
                 width="120" v-if="showMore">
                 </el-table-column>
@@ -196,6 +182,7 @@
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">查看详情</el-button>
                     <!-- <el-button type="text" size="small">编辑</el-button> -->
                     <el-button type="text" @click="lookReport(scope.row)" size="small">安全报告</el-button>
+                    <el-button type="text" v-if="scope.row.status==1" @click="endLine(scope.row)" size="small">结束</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -208,7 +195,7 @@
                     :page-size="100"
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="total">
-                    </el-pagination>
+                   </el-pagination>
             </div>
         </div>
     </div>    
@@ -393,10 +380,35 @@ export default {
             }
             
         },
-          lookReport(row){
+         lookReport(row){
             // 查看安全报告
             this.$router.push({name:'report',query:{id:row.id}})
         },
+		endLine(row){
+			// 结束线路			
+			 this.$confirm('是否要结束此行程？', '提示', {
+			    confirmButtonText: '确定',
+			    cancelButtonText: '取消',
+			    type: 'warning'
+			}).then(() => {
+				this.$axios.post(this.$url+'mgLine/shutdownLine',{
+					lineId:row.lineId
+				}).then(res=>{
+					if(res.code==100){
+						this.$message({
+							type: 'success',
+							message: '操作成功!'
+						});
+						this.searchIndex()
+					}
+				})			  
+			}).catch(() => {
+			  this.$message({
+				type: 'info',
+				message: '已取消'
+			  });          
+			});
+		}
     }
 }
 </script>

@@ -6,7 +6,7 @@
             <el-breadcrumb-item >{{title}}</el-breadcrumb-item>
         </el-breadcrumb>
         <div>
-            <el-form ref="form" :model="form" label-width="100px">
+            <el-form ref="form" :model="form" label-width="160px">
                 <el-form-item label="姓名">
                     <el-input v-model="form.name" v-if="isEdit"></el-input>
                     <span v-else>{{form.name}}</span>
@@ -35,6 +35,11 @@
                         <el-option label="四年级" :value="4"></el-option>                  
                         <el-option label="五年级" :value="5"></el-option>                  
                         <el-option label="六年级" :value="6"></el-option> 
+                        <el-option label="七年级" :value="7"></el-option> 
+                        <el-option label="八年级" :value="8"></el-option> 
+                        <el-option label="九年级" :value="9"></el-option> 
+                        <el-option label="高一" :value="10"></el-option> 
+                        <el-option label="高二" :value="11"></el-option> 
                     </el-select>
                     <!-- <span v-else>{{form.grade}}</span> -->
                 </el-form-item>
@@ -51,7 +56,7 @@
                      </el-date-picker>
                     <span v-else>{{form.birthDate}}</span>
                 </el-form-item>
-                 <el-form-item label="站点">
+                 <el-form-item label="预设线路站点">
                      <span>{{form.siteName}}</span>
                 </el-form-item>
                  <el-form-item label="产品ID">
@@ -59,14 +64,25 @@
                 </el-form-item>
                  <el-form-item label="产品名称">
                     <span >{{form.productName}}</span>
+					<el-button @click="getProductList()" type="text">修改</el-button>
                 </el-form-item>
                  <el-form-item label="产品类型">
-                    <span >{{productInfo.productType==1?'早':(productInfo.productType==2?'晚':'全包')}}</span>
+                    <span >{{form.productType==1?'早':(form.productType==2?'晚':(form.productType==3?'全包':''))}}</span>
                     <!-- <span>{{productInfo.productType}}</span> -->
                 </el-form-item>
                  <el-form-item label="有效期">
                     <span >{{form.closeDate}}</span>
                 </el-form-item>
+				<el-form-item label="期望预设线路">
+				    <span >{{form.closeDate}}</span>
+				</el-form-item>
+				<el-form-item label="期望预设线路站点">
+				    <span >{{form.expectProductName}}</span>
+				</el-form-item>
+				<el-form-item label="期望预设线路产品类型">
+				    <span >{{form.expectProductType==1?'早':(form.expectProductType==2?'晚':(form.expectProductType==3?'全包':''))}}</span>
+				    <!-- <span>{{productInfo.productType}}</span> -->
+				</el-form-item>
                 <el-form-item label="是否录入人脸识别">
                     <span>{{form.haveFaceRecognitionIdentification==1?'已录入':'未录入'}}</span>
                 </el-form-item>
@@ -76,6 +92,36 @@
                 </el-form-item>
 
             </el-form>
+			<h3 class="titleline"><span>正式线路</span></h3>
+			<el-table
+			class="linelist"
+			  :data="form.lineVos"
+			  border
+			  style="width: 710px">
+			  <el-table-column
+				prop="lineId"
+				label="id"
+				width="180">
+			  </el-table-column>
+			  <el-table-column
+				prop="lineName"
+				label="名称"
+				width="180">
+			  </el-table-column>
+			  <el-table-column
+				prop="siteName"
+				label="站点"
+				width="180">
+			  </el-table-column>
+			  <el-table-column
+				prop="startName"
+				label="起点">
+			  </el-table-column>
+			  <el-table-column
+				prop="endName"
+				label="终点">
+			  </el-table-column>
+			</el-table>
             <div class="btns">
                 <el-button v-if="isEdit" type="warning" @click="submitInfo()" plain>提交</el-button>
                 <el-button v-else type="warning" @click="isEdit=true" plain>修改</el-button>
@@ -83,7 +129,72 @@
                 <el-button v-else type="primary" @click="goBack()" plain>返回</el-button>
             </div>
         </div>
-        <School :show="showDraw" @changeToSchool="changeToSchool" />
+        <!-- <School :show="showDraw" @changeToSchool="changeToSchool" /> -->
+		<el-drawer
+		       title="产品列表"
+		       :visible.sync="showDraw"
+		       direction="rtl"
+		       :before-close="closeDraw"
+		       size="700px">
+		       <el-input v-model="productName" placeholder="请输入产品名称"></el-input>
+		       <el-button type="success" @click="getProductList()" plain>搜索</el-button>
+		       <el-table  ref="yunyTable" :data="productList">
+		           <el-table-column property="id" label="id" width="60"></el-table-column>
+		           <el-table-column property="name" label="名称" ></el-table-column>
+		           <el-table-column property="morning" label="早接" >
+					   <template slot-scope="scope">
+						 <span>{{scope.row.morning==1?'是':'否'}}</span> 
+					   </template>
+				   </el-table-column>
+		           <el-table-column property="night" label="晚送" >
+					  <template slot-scope="scope">
+					  		<span>{{scope.row.night==1?'是':'否'}}</span>				   
+					  </template>
+				   </el-table-column>
+		           <el-table-column property="whole" label="全包" >
+					   <template slot-scope="scope">
+							<span>{{scope.row.whole==1?'是':'否'}}</span>			   
+					   </template>
+				   </el-table-column>
+		           <el-table-column property="closingDate" label="到期时间" width="150" ></el-table-column>
+		           <el-table-column property="name" label="操作">
+		            <template slot-scope="scope">
+		               <el-button @click="changeProduct(scope.row)" type="text" size="small">确定</el-button>
+		           </template>
+		           </el-table-column>
+		       </el-table>
+		        <div class="block">
+		           <el-pagination
+		               @size-change="handleSizeChange"
+		               @current-change="handleCurrentChange"
+		               :current-page.sync="pageNum"
+		               :page-sizes="[10, 20, 30, 40]"
+		               :page-size="100"
+		               layout="total, sizes, prev, pager, next, jumper"
+		               :total="total">
+		               </el-pagination>
+		       </div>
+		   </el-drawer>
+		   <div class="shadow" v-show="typeShow">
+			   <div class="checkbox">
+				   <h3>请选择</h3>
+				   <el-form label-width="80px">
+					   <el-form-item label="类型">
+							<el-radio-group v-model="checkType">
+							   <el-radio v-if="this.changeInfo.morning" :label="1">早接</el-radio>
+							   <el-radio v-if="this.changeInfo.night" :label="2">晚送</el-radio>
+							   <el-radio v-if="this.changeInfo.whole" :label="3">全包</el-radio>
+							 </el-radio-group>
+						</el-form-item>
+						<el-form-item label="站点">
+							<el-radio-group class="sites" v-model="site">
+							   <el-radio v-for="(item,index) in changeInfo.sites" :label="item.id">{{item.name}}</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-form>
+					<el-button type="success" @click="changeP()">确定</el-button>
+			   </div>
+		   </div>
      </div>
 </template>
 <script>
@@ -108,11 +219,24 @@ export default {
                 thirdInsurance:1,
                 ascription:'',
                 status:1,
-                drivingLicense:''
+                drivingLicense:'',
+				site:null
             },
             productInfo:{},//产品信息
+			productList:[],//预设线路列表
+			total:'',
+			pageNum:1,
+			pageSize:10,
+			productName:'',
+			changeInfo:{},
+			checkType:null,
+			typeShow:false,
+			site:null
         }
     },
+	watch:{
+		
+	},
     created(){
         this.userInfo=JSON.parse(sessionStorage.userInfo)
         if(this.$route.query.id){
@@ -126,6 +250,15 @@ export default {
         }
     },
     methods:{
+		handleCurrentChange(val){
+			console.log(val)
+			this.pageNum=val
+			this.getProductList()
+		},
+		handleSizeChange(val){
+			this.pageSize=val
+			this.getProductList()
+		},
         changeToSchool(data){
             console.log("选择学校")
             console.log(data)
@@ -182,12 +315,59 @@ export default {
            })
             this.$axios.post(this.$url+"mgChildren/updatDetail",{id:this.id}).then(res=>{
                if(res.code==100){
-                   this.productInfo=res.info
+                   this.productInfo=res.info				   
                }
            })
-       }
-    }
-    
+       },
+	   getProductList(){
+		   if(this.showDraw==false){
+			   this.showDraw=true
+		   }
+			this.$axios.post(this.$url+"mgChildren/listProduct",{
+				pageNum:this.pageNum,
+				pageSize:this.pageSize,
+				name:this.productName,
+				childrenId:this.id
+			}).then(res=>{
+				if(res.code==100){
+					this.productList=res.info.rows
+					this.total=res.info.total
+				}
+			})
+	   },
+	   closeDraw(val){
+		   // console.log(val)
+		   this.showDraw=false
+	   },
+	   changeProduct(val){
+		   this.showDraw=false
+		   console.log(val)
+		   this.changeInfo=val
+		   this.typeShow=true
+		   if(this.form.expectSite){
+			   this.checkType=this.form.expectProductType*1
+			   this.form.site=this.form.expectSite*1
+			   this.site=this.form.expectSite*1
+		   }		  
+	   },
+	   changeP(){
+		  this.form.productName=this.changeInfo.name
+		  this.form.productType=this.checkType
+		  this.productInfo.productType=this.checkType
+		  this.form.productId=this.changeInfo.id
+		  this.form.closeDate=this.changeInfo.closingDate
+		  let list=this.changeInfo.sites
+		  let siteId=this.site
+		  list.forEach((item,index)=>{
+			  if(item.id==siteId){
+				  this.form.siteName=item.name
+			  }
+		  })
+		  console.log(this.changeInfo)
+		  this.isEdit=true
+		  this.typeShow=false
+	   },
+    }    
 }
 </script>
 <style lang="scss" scoped>
@@ -212,5 +392,34 @@ export default {
 }
 .el-input{
     width: 300px;
+}
+.el-button--text{
+	margin-left: 20px;
+}
+.checkbox{
+	width: 400px;
+	margin-top: 150px;
+	position: static;
+	padding-bottom: 20px;
+	.el-radio-group{
+		margin-top: 20px;
+	}
+	.el-button{
+		display: block;
+		margin: auto;
+		margin-top:30px ;
+		width: 150px;
+	}
+	.sites{
+		.el-radio{
+			margin: 10px;
+		}
+	}
+}
+.titleline{
+	margin: 20px 0;
+}
+.linelist{
+	margin-bottom:30px ;
 }
 </style>

@@ -58,7 +58,7 @@
         <p>当前营收：{{form.income}}元</p>
         <p>活动支出：{{form.expend}}元</p>
         <div class="btns">           
-         <el-button type="danger" plain>确定</el-button>
+         <el-button type="danger" @click="goBack()" plain>确定</el-button>
          <!-- <el-button type="success" plain>编辑</el-button> -->
         </div>
           <div class="shadow" v-if="updateShow">
@@ -117,6 +117,9 @@ export default {
        this.init()
     },
     methods:{
+		goBack(){
+			this.$router.go(-1)
+		},
        init(){
           this.$axios.post(this.$url+"mgSchool/detail",{
              schoolId:this.schoolId

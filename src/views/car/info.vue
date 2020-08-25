@@ -184,11 +184,6 @@ export default {
                             this.isEdit=false
                             this.init()
                         }
-                    }else if(res.code==250){
-                        this.$message({
-                            type:"warning",
-                            message:res.msg
-                        })
                     }
                 })
             }

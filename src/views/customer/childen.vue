@@ -26,7 +26,12 @@
                         <el-option label="三年级" value="3"></el-option>                  
                         <el-option label="四年级" value="4"></el-option>                  
                         <el-option label="五年级" value="5"></el-option>                  
-                        <el-option label="六年级" value="6"></el-option>                  
+                        <el-option label="六年级" value="6"></el-option>  
+						<el-option label="七年级" value="7"></el-option>
+						<el-option label="八年级" value="8"></el-option> 
+						<el-option label="九年级" value="9"></el-option> 
+						<el-option label="高一" value="10"></el-option> 
+						<el-option label="高二" value="11"></el-option> 
                     </el-select> 
                 </el-form-item>
                 <el-form-item label="班级">
@@ -39,8 +44,8 @@
 
         <div class="table">
             <h3 class="cl">
-                <span学生列表</span>
-                <!-- <el-button type="success" @click="goAdd()" plain>添加</el-button> -->
+                <span>学生列表</span>
+                <el-button type="success" @click="exportExcel()" plain>导出</el-button>
             </h3>
              <el-table
                 :data="list"
@@ -74,7 +79,7 @@
                 label="班级"
                 width="80"> 
                 <template slot-scope="scope">
-                    <p>{{scope.row.grade+"年级"}}{{scope.row.clazz+"班"}}</p>
+                    <p>{{scope.row.grade>9?(scope.row.grade==10?'高一':'高二'):scope.row.grade+"年级"}}{{scope.row.clazz+"班"}}</p>
                 </template> 
                 </el-table-column> 
                 <el-table-column
@@ -87,14 +92,24 @@
                 label="家长"
                 width="100">
 					<template slot-scope="scope">
-						<p v-for="(item,index) in scope.row.relations">{{item.parentName}}{{item.relation?'('+item.relation+')':''}}</p>
+						<p v-for="(item,index) in scope.row.relations">{{item.parentName?item.parentName:''}}{{item.relation&&item.relation!='null'?'('+item.relation+')':''}}</p>
 					</template> 
                 </el-table-column>
                 <el-table-column
                 prop="siteName"
-                label="站点"
+                label="预设线路站点"
                 width="150"> 
                 </el-table-column>  
+				<el-table-column
+				prop="expectSiteName"
+				label="期望预设线路站点"
+				width="150"> 
+				</el-table-column>  
+				<el-table-column
+				prop="expectProductName"
+				label="期望的预设线路"
+				width="150"> 
+				</el-table-column>  
                 <el-table-column
                 prop="closeDate"
                 label="有效期"
@@ -219,6 +234,59 @@ export default {
             // 线路运行记录
             this.$router.push({name:"run",query:{childId:row.id}})
         },
+		exportExcel(){
+			  // 导出成excel表
+			  // 获取完整的数据
+			   const loading = this.$loading({
+					lock: true,
+					text: '正在加载数据，请稍等！',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
+				  let list=[]
+				 this.$axios.post(this.$url+"mgChildren/list",{
+						pageNum:1, 
+						pageSize:this.total,
+						managerId:this.form.managerId,
+						schoolId:this.form.schoolId,
+						name:this.form.name,
+						parentName:this.form.parentName,
+						grade:this.form.grade,
+						clazz:this.form.clazz
+					}).then(res=>{
+				    if(res.code==100){
+						loading.close();
+						list=res.info.rows								
+						list.forEach((item,index)=>{
+							item.sex=item.sex==0?'女':'男'
+							item.haveFaceRecognitionIdentification=item.haveFaceRecognitionIdentification==0?'未录入':'已录入'
+							let parentlist=item.relations
+							let parentStr=''
+							parentlist.forEach((item2,index2)=>{
+								if(item2.parentName){
+									parentStr+=item2.parentName+(item2.relation?'('+item2.relation+')':'')
+								}
+							})
+							item.parentStr=parentStr
+						})
+						let exportloading = this.$loading({
+							lock: true,
+							text: '正在生成表格并导出，请稍等！',
+							spinner: 'el-icon-loading',
+							background: 'rgba(0, 0, 0, 0.7)'
+						});	
+						let { export_json_to_excel } = require('../../untils/export2Excel.js');
+						let tHeader = ['ID', '姓名', '性别','学校','年级','班级','出生日期','家长','预设线路站点','有效期','人脸识别是否已录入'];
+						let filterVal = ['id','name','sex','schoolName','grade','clazz','birthDate','parentStr','siteName','closeDate','haveFaceRecognitionIdentification'];				
+						let data = this.formatJson(filterVal, list);
+						export_json_to_excel(tHeader, data, '学生');
+						exportloading.close();
+				    }
+				  })
+		},
+		 formatJson(filterVal, jsonData) {
+				return jsonData.map(v => filterVal.map(j => v[j]))
+		}
     }
 }
 </script>

@@ -42,7 +42,7 @@
           <el-submenu index="4">
             <template slot="title"><i class="iconfont icon-ziyuan"></i>资源管理</template>
             <el-menu-item-group>
-              <el-menu-item index="4-1" @click="goRouter('equipment','4-1')">设备管理</el-menu-item>
+              <el-menu-item index="4-1" @click="goRouter('equipment','4-1')">设备账号管理</el-menu-item>
               <el-menu-item index="4-2"  @click="goRouter('car','4-2')">车辆管理</el-menu-item>
               <el-menu-item index="4-3"  @click="goRouter('security','4-3')">安全员管理</el-menu-item>
               <el-menu-item index="4-4"  @click="goRouter('drivers','4-4')">司机管理</el-menu-item>

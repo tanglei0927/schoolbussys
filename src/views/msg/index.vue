@@ -56,7 +56,8 @@
         <div class="table">
             <h3 class="cl">
                 <span>消息列表</span>
-                <el-button v-if="userInfo.isSuperAccount!=1" type="success" @click="addMsgShow=true" plain>群发消息</el-button>
+				<!-- v-if="userInfo.isSuperAccount!=1" -->
+                <el-button  type="success" @click="addMsgShow=true" plain>群发消息</el-button>
             </h3>
              <el-table
                 :data="list"
@@ -98,7 +99,7 @@
                 label="接收人身份"
                 width="100">
                   <template slot-scope="scope">
-                    <p>{{scope.row.launchType==1?'家长':'安全员'}}</p>
+                    <p>{{scope.row.receiveType==1?'家长':(scope.row.receiveType==2?'安全员':'运营员')}}</p>
                 </template>
                 </el-table-column>
                 <el-table-column
@@ -198,6 +199,20 @@
                     <el-form-item label="内容：">
                         <el-input type="textarea" v-model="addInfo.content"></el-input>
                     </el-form-item>
+					<el-form-item label="附图：">
+						<el-upload
+						  :action="imgurl+'file/uploadOSS'"
+						  list-type="picture-card"
+						  :on-remove="handleRemove"
+						  :before-upload="beforeUpload"
+						  :on-success="upSuccess"
+						  >
+						  <i class="el-icon-plus"></i>
+						</el-upload>
+						<el-dialog :visible.sync="dialogVisible">
+						  <img width="100%" :src="dialogImageUrl" alt="">
+						</el-dialog>
+					</el-form-item>
                 </el-form>
                 <div class="btns">
                     <el-button type="success" @click="isOk()" plain>确定</el-button>
@@ -242,15 +257,42 @@ export default {
             examineShow:false,
             addMsgShow:false,
             addInfo:{},
-            schoolName2:""
+            schoolName2:"",
+			imgurl:'',
+			dialogImageUrl: '',
+			dialogVisible: false,
+			imgList:[]
         }
     },
     created(){
         this.userInfo=JSON.parse(sessionStorage.userInfo)
         this.form.managerId=this.userInfo.id
         this.init()
+		this.imgurl=this.$url
     },
     methods:{
+		 handleRemove(file, fileList) {
+			let removeF=file.response.info
+			let imgList=this.imgList
+			let index=imgList.indexOf(removeF)
+			imgList.splice(index,1)
+			this.imgList=imgList
+		 },
+		 upSuccess(file){
+			 this.imgList.push(file.info)
+		 },
+		  beforeUpload(file){
+			  // console.log()
+			  if(this.imgList.length<3){
+				  return true
+			  }else{
+				  this.$message({
+					  type:"warning",
+					  message:"上传已达上限，最多只能上传3张"
+				  })
+				  return false
+			  }
+		  },
         handleSizeChange(val){
             console.log(val)
             this.form.pageSize=val
@@ -325,13 +367,22 @@ export default {
            this.$router.push({name:'msginfo',query:{id:row.id}})
        },
        isOk(){
+		   // console.log(this.imgList)
            this.addInfo.managerId=this.userInfo.id
+		   let imgs=""
+		   if(this.imgList.length==1){
+		   	imgs=this.imgList[0]
+		   }else{
+		   	imgs=this.imgList.join(",")
+		   }
+		   this.addInfo.photos=imgs
            this.$axios.post(this.$url+"mgNews/add",this.addInfo).then(res=>{
                if(res.code==100){
                    this.$message({
                        message:"发送成功"
                    })
                    this.addMsgShow=false
+				   this.addInfo={}
                    this.init()
                }
            })
@@ -363,9 +414,12 @@ export default {
     }
 }
 .addbox{
-    width: 400px;
-    height: 340px;
-	// top: 50px !important;
+    width: 600px;
+	position: static;
+	margin-top: 100px;
+	max-height: 500px;
+	overflow-x: hidden;
+	overflow-y: scroll;
     .el-form{
         margin-top: 20px;
         .el-form-item{

@@ -43,7 +43,7 @@
                 label="状态"
                 width="130">
                   <template slot-scope="scope">
-                       <div>
+                       <div :class="scope.row.status==1?'redtxt':''">
                            {{scope.row.status==0?'结束':'开启'}}
                         </div>
                     </template>
@@ -199,11 +199,13 @@ export default {
             console.log(val)
             this.pageSize1=val
             this.pageNum1=1
-            this.init()
+            // this.init()
+			this.getSchool()
         },
         handleCurrentChange1(val){
             this.pageNum1=val
-            this.init()
+            // this.init()
+			this.getSchool()
         },
         search(){
             this.pageNum=1
@@ -287,7 +289,7 @@ export default {
             })
         },
         lookDetails(item){
-            this.$router.push({name:'linesdetails',query:{id:item.id}})
+            this.$router.push({name:'linesdetails',query:{id:item.id,name:item.name}})
         },
         lineRunDtails(row){
             // 线路运行记录

@@ -57,13 +57,13 @@
           </div>
           <div>
             <h3><span>学生列表</span>
-            <!-- <el-button type="success" @click="addChild()" plain>添加学生</el-button> -->
+            <el-button type="success" @click="exportExcel()" plain>导出</el-button>
             </h3>
             <div>
               <el-table
                 :data="childList"
-                border
-                style="width: 100%">
+                border				
+                style="width: 100%">				
                 <el-table-column
                 prop="id"
                 label="id"
@@ -96,7 +96,7 @@
                   width="100"
                 >
                 <templat slot-scope="scope">
-                  <p>{{scope.row.grade+"年级"+(scope.row.clazz?scope.row.clazz+"班":'')}}</p>
+                  <p>{{scope.row.grade>9?(scope.row.grade==10?'高一':'高二'):scope.row.grade+"年级"}}{{(scope.row.clazz?scope.row.clazz+"班":'')}}</p>
                 </templat>
                 </el-table-column>
                 <el-table-column
@@ -119,22 +119,21 @@
                 </el-table-column>
                 <el-table-column
                   prop="siteName"
-                  label="上车站点"
+                  label="正式线路上车站点"
                   width="100"
                 >
                 </el-table-column>
+				 <el-table-column
+				  prop="closeDate"
+				  label="到期时间"
+				  width="150"
+				>
+				</el-table-column>
                 <el-table-column
-                  prop="detailAddress"
+                  prop="detailAddreee"
                   label="详细地址"
-                  width="150"
                 >
-                </el-table-column>
-                 <el-table-column
-                  prop="closeDate"
-                  label="到期时间"
-                  width="150"
-                >
-                </el-table-column>
+              </el-table-column>
                 <el-table-column
                 fixed="right"
                 label="操作"
@@ -198,11 +197,17 @@
             size="50%">
             <!-- <el-input v-model="siteStr" placeholder="请输入站点名称"></el-input> -->
             <!-- <el-button type="success" @click="getSite()" plain>搜索</el-button> -->
-            <el-table  ref="yunyTable" :data="gridData3">
+			<el-button type="success" v-show="childIdList.length>0" @click="addChildToline()">关联</el-button>
+            <el-table  ref="yunyTable" :data="gridData3" @selection-change="changeChildList">				
+				<el-table-column
+				    type="selection" 
+				    width="55">
+				</el-table-column>
                 <el-table-column property="id" label="id" width="80"></el-table-column>
                 <el-table-column property="name" label="姓名" ></el-table-column>
                 <el-table-column property="grade" label="年级" ></el-table-column>
                 <el-table-column property="clazz" label="班级" ></el-table-column>
+                <el-table-column property="siteName" label="预设线路站点" ></el-table-column>
                 <el-table-column property="clazz" label="产品类型" >
 					<template slot-scope="scope">
 						<p>{{scope.row.productType==1?'早':(scope.row.productType==2?'晚':(scope.row.productType==3?'全天':''))}}</p>
@@ -254,7 +259,8 @@ export default {
         childShow:false,
 		time:'',
 		timeShow:false,
-		timeChangeId:null
+		timeChangeId:null,
+		childIdList:[]
       }
     },
     created(){
@@ -264,6 +270,7 @@ export default {
       this.lineId=this.$route.query.id
       this.getSites()
       this.getChild()
+	  this.sitesName=this.$route.query.name
     },
     methods:{
       handleSizeChange(val){
@@ -442,11 +449,23 @@ export default {
           }
         })
       },
+	 changeChildList(val){
+		 this.childIdList=[]
+		 val.forEach((item,index)=>{
+			this.childIdList.push(item.id)
+		 })
+	 },
       addChildToline(row){
         // 向线路添加学生
+		let id=''
+		if(!row){
+			id=this.childIdList.join(",")
+		}else{
+			id=row.id
+		}
         this.$axios.post(this.$url+"mgLine/childrenAdd",{
           lineId:this.lineId,
-          childrenId:row.id,
+          childrenIds:id,
           siteId:this.checkSite.id
         }).then(res=>{
           if(res.code==100){
@@ -494,7 +513,48 @@ export default {
             message: '已取消删除'
           });          
         });
-      }
+      },
+	  exportExcel(){
+		  // 导出成excel表
+		  // 获取完整的数据
+		   const loading = this.$loading({
+			lock: true,
+			text: '正在加载数据，请稍等！',
+			spinner: 'el-icon-loading',
+			background: 'rgba(0, 0, 0, 0.7)'
+		  });
+		  let list=[]
+		  this.$axios.post(this.$url+"mgLine/childrenList",{
+		    lineId:this.lineId,
+		    pageSize:this.total,
+		    pageNum:1
+		  }).then(res=>{
+		    if(res.code==100){
+				loading.close();
+				list=res.info.rows	
+				list.forEach((item,index)=>{
+					item.sex=item.sex==0?'女':'男'
+				})
+				const exportloading = this.$loading({
+					lock: true,
+					text: '正在生成表格并导出，请稍等！',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});	
+				const { export_json_to_excel } = require('../../untils/export2Excel.js');
+				const tHeader = ['ID', '姓名', '性别','出生日期','年级','班','家长','家长联系方式','关系','正式线路上车站点','到期时间','详细地址'];
+				const filterVal = ['id','name','sex','birthDate','grade','clazz','parentname','phone','relation','siteName','closeDate','detailAddreee'];				
+				const data = this.formatJson(filterVal, list);
+				let titleE=''
+				titleE=this.sitesName?this.sitesName:'线路学生'
+				export_json_to_excel(tHeader, data, this.sitesName);
+				exportloading.close();
+		    }
+		  })
+	  },
+	   formatJson(filterVal, jsonData) {
+		  return jsonData.map(v => filterVal.map(j => v[j]))
+	  }
     },
 }
 </script>

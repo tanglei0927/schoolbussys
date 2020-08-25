@@ -18,7 +18,7 @@
          <el-table
                 :data="listData"
                 border
-                style="width: 900px">
+                style="width: 1100px">
                 <el-table-column
                 prop="id"
                 label="id"
@@ -36,7 +36,18 @@
                 <template slot-scope="scope">
                     <p :class="scope.row.isDelete==0?'greentxt':''">{{scope.row.isDelete==0?'否':'已删除'}}</p>
                 </template>
-                </el-table-column>     
+                </el-table-column>   
+				 <el-table-column
+				  prop="isRelationStreet"
+				  label="关联小区"
+				  width="200">
+				  <template slot-scope="scope">
+					  <p>
+						  <p v-for="(item,index) in scope.row.streets" v-if="index<=2">{{item}}</p>
+						  <span v-if="scope.row.streets.length>3">...</span>
+					  </p>
+				</template>
+				</el-table-column>  
                 <el-table-column
                 prop="createTime"
                 label="创建时间"

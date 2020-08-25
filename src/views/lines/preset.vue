@@ -116,7 +116,7 @@
                 label="晚送价格"
                 width="100">
                   <template slot-scope="scope">
-                        <p>{{scope.row.morningPrice}}元</p>
+                        <p>{{scope.row.nightPrice}}元</p>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -124,7 +124,7 @@
                 label="全包价格"
                 width="100">
                   <template slot-scope="scope">
-                        <p>{{scope.row.morningPrice}}元</p>
+                        <p>{{scope.row.wholePrice}}元</p>
                     </template>
                 </el-table-column>
                  <el-table-column

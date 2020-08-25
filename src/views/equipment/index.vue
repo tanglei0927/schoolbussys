@@ -2,7 +2,7 @@
 	<div>
 		<el-breadcrumb separator-class="el-icon-arrow-right">
 		    <el-breadcrumb-item :to="{ name: 'index' }">首页</el-breadcrumb-item>
-		    <el-breadcrumb-item >设备管理</el-breadcrumb-item>
+		    <el-breadcrumb-item >设备账号管理</el-breadcrumb-item>
 		</el-breadcrumb>
 		<div class="searchbox">
 		    <h3><span>筛选</span>
@@ -192,6 +192,12 @@
 						this.addShow=false
 						this.init()
 					}
+					// else if(res.code==250){
+					// 	this.$message({
+					// 		type:'error',
+					// 		message:res.msg
+					// 	})
+					// }
 				})
 			}
 		}

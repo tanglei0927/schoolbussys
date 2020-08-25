@@ -60,6 +60,7 @@ export default {
                 type: 'success'
               });
               sessionStorage.userInfo=JSON.stringify(res.info)
+			  sessionStorage.activePath="1-1"
               this.$router.push({name:"index"})
               // console.log
           }else if(res.code==250){

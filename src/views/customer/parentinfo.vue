@@ -54,6 +54,10 @@
                     <el-input v-if="isEdit" v-model="form.detailAddreee"></el-input>
                     <span v-else>{{form.detailAddreee}}</span>
                 </el-form-item>
+				<el-form-item label="小区">
+				    <!-- <el-input v-if="isEdit" v-model="form.detailAddreee"></el-input> -->
+				    <span >{{form.streetNmae}}</span>
+				</el-form-item>
                 <el-form-item label="头像">
                    <img :src="form.photo" alt="">
                 </el-form-item>   
@@ -62,7 +66,7 @@
             <el-table
                 :data="list"
                 border
-                style="width: 100%">
+                style="width: 100%;">
                 <el-table-column
                 prop="id"
                 label="id"
@@ -73,11 +77,11 @@
                 label="姓名"
                 width="80">
                 </el-table-column>
-                <el-table-column
+               <!-- <el-table-column
                 prop="relation"
                 label="关系"
                 width="80">                  
-                </el-table-column>   
+                </el-table-column> -->  
                 <el-table-column
                 prop="phone"
                 label="电话"
@@ -176,7 +180,7 @@ export default {
        this.provinceList=province
         this.userInfo=JSON.parse(sessionStorage.userInfo)
         if(this.$route.query.id){
-            this.title="车辆详情"
+            this.title="家长详情"
             this.id=this.$route.query.id
             this.isEdit=false
             this.init()
@@ -352,6 +356,7 @@ export default {
     }    
 }
 .btns{
+	margin-top: 20px;
     .el-button{
         margin:0 20px;
         width: 100px;

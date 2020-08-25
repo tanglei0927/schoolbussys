@@ -81,17 +81,27 @@
                 prop="name"
                 label="姓名"
                 width="80">
-                </el-table-column>
-                <el-table-column
-                prop="birthday"
-                label="出生日期"
-                width="100">
-                </el-table-column>
+                </el-table-column>               
                 <el-table-column
                 prop="phone"
                 label="电话"
                 width="110">
-                </el-table-column>                 
+                </el-table-column>   
+				  <el-table-column
+				  prop="account"
+				  label="账号"
+				  width="100">
+				  </el-table-column>
+				  <el-table-column
+				  prop="password"
+				  label="密码"
+				  width="100">
+				  </el-table-column>
+				  <el-table-column
+				  prop="birthday"
+				  label="出生日期"
+				  width="100">
+				  </el-table-column>
                 <el-table-column
                 prop="schoolName"
                 label="学校"

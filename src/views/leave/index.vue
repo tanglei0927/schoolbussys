@@ -69,7 +69,7 @@
                 label="班级"
                 width="100">
                   <template slot-scope="scope">
-                    <p>{{scope.row.grade+"年级"+scope.row.clazz+"班"}}</p>
+                    <p>{{scope.row.grade>9?(scope.row.grade==10?'高一':'高二'):scope.row.grade+"年级"}}{{scope.row.clazz+"班"}}</p>
                 </template>
                 </el-table-column>
                 <el-table-column

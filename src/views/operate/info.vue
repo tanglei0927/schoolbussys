@@ -94,7 +94,7 @@
                     <el-input v-model="form.password" v-if="isEdit"></el-input>
                     <span v-else>{{form.password}}</span>
                 </el-form-item>
-                 <el-form-item class="uplaodbox" label="头像">
+                <!-- <el-form-item class="uplaodbox" label="头像">
                      <img v-if="form.headUrl" :src="$url+'file/readFile/'+form.headUrl" alt="">
                     <el-upload
                         :action="$url+'file/uploadFile'"
@@ -104,7 +104,7 @@
                         :on-success="upSuccess">
                         <i class="el-icon-plus"></i>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
 			</el-form>
 			<div class="schoolbox">
 				<h3><span>归属学校</span></h3>
@@ -143,7 +143,7 @@ export default {
                 age:"",
                 idCard:'',
                 teacherCertification:1,
-                isSuperAccount:1,
+                isSuperAccount:0,
                 isForbidden:0,
                 headUrl:'',
                 province:{
@@ -164,6 +164,7 @@ export default {
             areaList:[],
             value1:'',
 			isUpdate:false,
+			isOtj:true,
         }
     },
     created(){
@@ -195,6 +196,7 @@ export default {
                             message:"添加成功！",
                             type:"success"
                         })
+						this.$router.go(-1)
                     }
                 })
             }
@@ -223,7 +225,7 @@ export default {
                     type:"warning",
                     message:'紧急联系人电话号码格式不正确'
                 })
-            }else if(!data.account||!data.password||!data.headUrl||!data.idCard){
+            }else if(!data.account||!data.password||!data.idCard){
                 this.$message({
                     type:"warning",
                     message:'请完善信息'
@@ -236,42 +238,63 @@ export default {
                      data.birthday=this.$untils.getDate(this.value1)
                 }
                 console.log(data)
-                this.$axios.post(this.$url+reqUrl,data,'application/json').then(res=>{
-                    if(res.code==100){                       
-                        if(!data.id){
-                            // this.goBack()
-							// 添加成功，提示去添加学校 info
-							  this.$confirm('添加成功，前去添加学校?', '提示', {
-							          confirmButtonText: '确定',
-							          cancelButtonText: '取消',
-							          type: 'warning'
-							        }).then(() => {
-							          this.id=res.info
+				if(this.isOtj){	
+					this.isOtj=false
+					this.$axios.post(this.$url+reqUrl,data,'application/json').then(res=>{
+						setTimeout(()=>{
+							this.isOtj=true
+						},2000)
+						if(res.code==100){						
+							if(!data.id){
+								// this.goBack()
+								// 添加成功，提示去添加学校 info
+								if(this.form.isSuperAccount==1){
+									// 超级管理
+									this.$message({
+										type:"success",
+										message:"添加成功!"
+									})
+									this.$router.go(-1)
+								}else{								
+									 this.$confirm('添加成功，前去添加学校?', '提示', {
+									  confirmButtonText: '确定',
+									  cancelButtonText: '取消',
+									  type: 'warning'
+									}).then(() => {
+									  this.id=res.info
 									  this.showDraw=true
-							        }).catch(() => {
-							          this.$message({
-							            type: 'info',
-							            message: '已取消！'
-							          });          
+									}).catch(() => {
+									  this.$message({
+										type: 'info',
+										message: '已取消！'
+									  });          
 									  setTimeout(()=>{
 										  this.goBack()
 									  },1000)
-							        });
-                        }else{
+									});							
+								}
+							}else{
+								this.$message({
+									type:"success",
+									message:tsMsg+"成功！"
+								})
+								this.isEdit=false
+								this.init()
+							}
+						}else if(res.code==250){
 							this.$message({
-							    type:"success",
-							    message:tsMsg+"成功！"
+								type:"warning",
+								message:res.msg
 							})
-                            this.isEdit=false
-                            this.init()
-                        }
-                    }else if(res.code==250){
-                        this.$message({
-                            type:"warning",
-                            message:res.msg
-                        })
-                    }
-                })
+						}
+					})
+				}else{
+					// 防止重复点击
+					this.$message({
+						type:"warning",
+						message:'正在提交，请不要重复操作！'
+					})
+				}
             }
         },
        init(){
