@@ -163,7 +163,7 @@ export default {
             console.log("添加，修改")
             console.log(this.form)
             let data=this.form
-            if(!data.licenseId||!data.ascription||!data.carriersNumber||!data.drivingLicense){
+            if(!data.licenseId||!data.ascription||!data.carriersNumber||!data.drivingLicense||!data.schoolId){
                 this.$message({
                     type:"warning",
                     message:'请完善信息'

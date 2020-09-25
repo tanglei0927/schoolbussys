@@ -42,7 +42,7 @@
            <div>
               <!-- <span>张是哪 <em class="redtxt">(离职)</em></span> -->
              <span v-for="(item,index) in form.vehicles" >{{item.licenseId}}
-                     <em v-if="item.status==1" class="redtxt">(离职)</em>
+                     <em v-if="item.status==0" class="redtxt">(离职)</em>
              </span>
            </div>
         </div>

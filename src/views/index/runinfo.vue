@@ -180,9 +180,9 @@
                >
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">查看详情</el-button>
-                    <!-- <el-button type="text" size="small">编辑</el-button> -->
                     <el-button type="text" @click="lookReport(scope.row)" size="small">安全报告</el-button>
                     <el-button type="text" v-if="scope.row.status==1" @click="endLine(scope.row)" size="small">结束</el-button>
+					<el-button type="text" @click="deleteRunLines(scope.row)" size="small">删除</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -393,6 +393,31 @@ export default {
 			}).then(() => {
 				this.$axios.post(this.$url+'mgLine/shutdownLine',{
 					lineId:row.lineId
+				}).then(res=>{
+					if(res.code==100){
+						this.$message({
+							type: 'success',
+							message: '操作成功!'
+						});
+						this.searchIndex()
+					}
+				})			  
+			}).catch(() => {
+			  this.$message({
+				type: 'info',
+				message: '已取消'
+			  });          
+			});
+		},
+		deleteRunLines(row){
+			// 删除运行记录
+			this.$confirm('是否要删除线路：'+row.lineName+'的运行记录？', '提示', {
+			    confirmButtonText: '确定',
+			    cancelButtonText: '取消',
+			    type: 'warning'
+			}).then(() => {
+				this.$axios.post(this.$url+'mgLineRecord/delete',{
+					lineRecordId:row.id
 				}).then(res=>{
 					if(res.code==100){
 						this.$message({

@@ -197,7 +197,7 @@
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="内容：">
-                        <el-input type="textarea" v-model="addInfo.content"></el-input>
+                        <el-input type="textarea" rows="5" v-model="addInfo.content"></el-input>
                     </el-form-item>
 					<el-form-item label="附图：">
 						<el-upload
@@ -236,11 +236,11 @@ export default {
                 managerId:null,
                 schoolId:null,
                 status:null,//状态  1：未支付  2支付中 3支付完成
-                start:"",
-                end:"",
-                sendName:'',
-                sendType:'',
-                type:''
+                start:null,
+                end:null,
+                sendName:null,
+                sendType:null,
+                type:null
             },
             value1:"",
             schoolshow:false,
@@ -270,6 +270,15 @@ export default {
         this.init()
 		this.imgurl=this.$url
     },
+	watch:{
+		addMsgShow:function(newval,oldval){
+			console.log(newval)
+			if(newval){
+				this.schoolName2=""
+				this.addInfo={}
+			}
+		}
+	},
     methods:{
 		 handleRemove(file, fileList) {
 			let removeF=file.response.info
@@ -329,7 +338,7 @@ export default {
                 data.start=this.$untils.getDate(this.value1[0])
                 data.end=this.$untils.getDate(this.value1[1])
             }
-            this.$axios.post(this.$url+"mgNews/list",data).then(res=>{
+            this.$axios.post(this.$url+"mgNews/list",data,'application/json;charset=UTF-8').then(res=>{
                 if(res.code==100){
                     this.list=res.info.rows
                     this.total=res.info.total
@@ -364,6 +373,7 @@ export default {
             })
        },
        lookDetails(row){
+		   sessionStorage.msgInfo=JSON.stringify(row)
            this.$router.push({name:'msginfo',query:{id:row.id}})
        },
        isOk(){
@@ -430,6 +440,9 @@ export default {
             }
         }
     }
+	textarea{
+		height: 300px;
+	}
     .btns{
         text-align: center;
     }

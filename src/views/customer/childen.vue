@@ -135,6 +135,7 @@
                 label="操作"
                 width="100">
                 <template slot-scope="scope">
+					<el-button v-if="userInfo.isSuperAccount==1" @click="deleteChildren(scope.row)" type="text" size="small">删除</el-button>
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">详情</el-button>
                     <el-button @click="lineRunDtails(scope.row)" type="text" size="small">线路运行记录</el-button>
                 </template>
@@ -234,6 +235,36 @@ export default {
             // 线路运行记录
             this.$router.push({name:"run",query:{childId:row.id}})
         },
+		deleteChildren(row){
+		     this.$confirm('是否要删除学生：'+row.name+'?', '提示', {
+		         confirmButtonText: '确定',
+		         cancelButtonText: '取消',
+		         type: 'warning'
+		         }).then(() => {
+		             this.$axios.post(this.$url+"mgChildren/delete",{
+		                 id:row.id
+		             }).then(res=>{
+		                 if(res.code==100){
+		                     this.$message({
+		                         type: 'success',
+		                         message: '删除成功!'
+		                     });
+		                     this.init()
+		                 }else if(res.code==250){
+		                      this.$message({
+		                         type: 'warning',
+		                         message: res.mssg
+		                     });
+		                 }
+		             })
+		        
+		         }).catch(() => {
+		         this.$message({
+		             type: 'info',
+		             message: '已取消删除'
+		         });          
+		     }); 
+		},
 		exportExcel(){
 			  // 导出成excel表
 			  // 获取完整的数据

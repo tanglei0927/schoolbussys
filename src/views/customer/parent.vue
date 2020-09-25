@@ -92,7 +92,7 @@
                 width="100">
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">详情</el-button>
-                    <!-- <el-button @click="deleteDrivers(scope.row)" type="text" size="small">删除</el-button> -->
+					<el-button v-if="userInfo.isSuperAccount==1" @click="deleteParent(scope.row)" type="text" size="small">删除</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -200,13 +200,13 @@ export default {
         lookDetails(row){
             this.$router.push({name:'parentinfo',query:{id:row.id}})
         },
-       deleteDrivers(row){
-            this.$confirm('是否要删除司机：'+row.name+'?', '提示', {
+       deleteParent(row){
+            this.$confirm('是否要删除家长：'+row.name+'?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
                 }).then(() => {
-                    this.$axios.post(this.$url+"mgDriver/delete",{
+                    this.$axios.post(this.$url+"mgParent/delete",{
                         id:row.id
                     }).then(res=>{
                         if(res.code==100){
@@ -282,7 +282,7 @@ export default {
 	   },
 	    formatJson(filterVal, jsonData) {
 	   		return jsonData.map(v => filterVal.map(j => v[j]))
-	   }
+	   },
     }
 }
 </script>

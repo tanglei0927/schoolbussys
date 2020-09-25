@@ -37,7 +37,12 @@ export default {
     },
     created(){
         this.id=this.$route.query.id
-        this.init()
+		if(this.id==0){
+			let info=sessionStorage.msgInfo
+			this.info=JSON.parse(info)			
+		}else{
+			this.init()
+		}
 		this.imgurl=this.$url
     },
     methods:{

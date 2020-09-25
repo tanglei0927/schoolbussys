@@ -81,6 +81,7 @@
                     <el-button @click="updateLines(scope.row)" type="text" size="small">编辑</el-button>
                     <el-button type="text" @click="lookDetails(scope.row)" size="small">详情</el-button>
                     <el-button type="text" @click="lineRunDtails(scope.row)" size="small">运行记录</el-button>
+                    <!-- <el-button type="text" @click="copyLines(scope.row)" size="small">复制线路</el-button> -->
                 </template>
                 </el-table-column>
             </el-table>
@@ -175,7 +176,8 @@ export default {
             addShow:false,
             updateShow:false,
             schoolshow:false,
-            schoolStr:''
+            schoolStr:'',
+			copyLine:{}
         }
     },
     created(){
@@ -295,6 +297,26 @@ export default {
             // 线路运行记录
             this.$router.push({name:"run",query:{lineId:row.id}})
         },
+		copyLines(row){
+			console.log("线路复制")
+			this.$prompt('您是否要复制线路名为：'+row.name+' 的线路', '提示', {
+			  confirmButtonText: '确定',
+			  cancelButtonText: '取消',
+			  // inputPattern: tru,
+			  inputValue:row.name,
+			  inputErrorMessage: '请输入线路名'
+			}).then(({ value }) => {
+			  this.$message({
+				type: 'success',
+				message: '你的邮箱是: ' + value
+			  });
+			}).catch(() => {
+			  this.$message({
+				type: 'info',
+				message: '取消输入'
+			  });       
+			});
+		}
     }
 }
 </script>

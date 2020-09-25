@@ -160,11 +160,11 @@ export default {
             console.log(val)
             this.pageSize=val
             this.pageNum=1
-            this.searchIndex()
+            this.init()
         },
         handleCurrentChange(val){
             this.pageNum=val
-            this.searchIndex()
+            this.init()
         },
         init(){
             this.$axios.post(this.$url+"mgLineRecord/detail",{
@@ -183,6 +183,11 @@ export default {
             // 查看安全报告
             this.$router.push({name:'report',query:{id:this.lineId}})
         },
+		getStatic(){
+			// 学生姓名筛选
+			this.pageNum=1
+			this.init()
+		}
     }
 }
 </script>

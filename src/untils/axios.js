@@ -69,7 +69,7 @@ axios.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
     // Toast({message:"未知错误-res",duration:500})
-    Message.warning('网络异常，请重新登录')
+    Message.warning('网络异常，请稍后再试！')
 
     // setTimeout(()=>{
     //   router.push({name:'login'});
