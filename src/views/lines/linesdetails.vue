@@ -18,7 +18,9 @@
                   <li v-for="(item,index) in sites">
                       <i @click="showSite(index)" class="el-icon-edit"></i>
                       <span>站点{{item.order}}：{{item.name}}</span>
-					  <p>上一站到本站所需时长：{{item.time}}分钟</p>
+					  <p>上一站到本站所需时长：{{item.time}}分钟
+					  <i v-if="index!==0"  @click="changeTime(index,item)" class="el-icon-time"></i>
+					  </p>
                       <i @click="deleteSite(index)" class="el-icon-error"></i>
                   </li>
                    
@@ -410,6 +412,12 @@ export default {
 			  }
 		  })
 		  this.timeShow=false
+	  },
+	  changeTime(index,item){
+		  this.timeShow=true
+		  this.siteIndex=index
+		  this.time=item.time
+		  this.timeChangeId=item.id
 	  },
         deleteSite(index){
           // 根据下标删除选中的站点
