@@ -141,7 +141,8 @@
                 >
                 <template slot-scope="scope">
                     <el-button @click="lookDetails(scope.row)" type="text" size="small">详情</el-button>
-                    <el-button @click="changeExamine(scope.row)" type="text" size="small">审核</el-button>
+                    <el-button v-if="scope.row.type==3" @click="changeExamine(scope.row)" type="text" size="small">审核</el-button>
+                    <el-button v-if="scope.row.type==1&&scope.row.receiveType==3" @click="lookDetails(scope.row,1)" type="text" size="small">回复</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -206,6 +207,7 @@
 						  :on-remove="handleRemove"
 						  :before-upload="beforeUpload"
 						  :on-success="upSuccess"
+						  :limit="3"
 						  >
 						  <i class="el-icon-plus"></i>
 						</el-upload>
@@ -259,8 +261,8 @@ export default {
             addInfo:{},
             schoolName2:"",
 			imgurl:'',
-			dialogImageUrl: '',
-			dialogVisible: false,
+			dialogImageUrl: '',		
+			dialogVisible:false,
 			imgList:[]
         }
     },
@@ -288,19 +290,23 @@ export default {
 			this.imgList=imgList
 		 },
 		 upSuccess(file){
-			 this.imgList.push(file.info)
+			 console.log(file)
+			let list=[]
+			list=this.imgList?this.imgList:list
+			list.push(file.info)
+			this.imgList=list
 		 },
 		  beforeUpload(file){
 			  // console.log()
-			  if(this.imgList.length<3){
-				  return true
-			  }else{
-				  this.$message({
-					  type:"warning",
-					  message:"上传已达上限，最多只能上传3张"
-				  })
-				  return false
-			  }
+			  // if(!this.imgList&&this.imgList.length<3){
+				 //  return true
+			  // }else{
+				 //  this.$message({
+					//   type:"warning",
+					//   message:"上传已达上限，最多只能上传3张"
+				 //  })
+				 //  return false
+			  // }
 		  },
         handleSizeChange(val){
             console.log(val)
@@ -372,14 +378,20 @@ export default {
              }
             })
        },
-       lookDetails(row){
+       lookDetails(row,type){
 		   sessionStorage.msgInfo=JSON.stringify(row)
-           this.$router.push({name:'msginfo',query:{id:row.id}})
+		   let data={}
+			data.id=row.id
+		   if(type){
+			   data.isreplay=true
+		   }
+           this.$router.push({name:'msginfo',query:data})
        },
        isOk(){
 		   // console.log(this.imgList)
            this.addInfo.managerId=this.userInfo.id
 		   let imgs=""
+		   console.log(this.imgList)
 		   if(this.imgList.length==1){
 		   	imgs=this.imgList[0]
 		   }else{
@@ -397,6 +409,7 @@ export default {
                }
            })
        },
+	  
     }
 }
 </script>

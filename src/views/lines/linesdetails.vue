@@ -406,12 +406,31 @@ export default {
 	  addTime(){
 		  // 给站点设定时间
 		  let list=this.sites
+		  let lastIndex=null
+		  let newsItem={}
 		  list.forEach((item,index)=>{
 			  if(item.id==this.timeChangeId){
 				  item.time=this.time
+				  if(this.time==0){
+					  //时间为0时为始发站
+					  item.order=0
+					  lastIndex=index
+					  newsItem=item
+				  }
 			  }
 		  })
-		  this.timeShow=false
+		let list2=[]
+		if(lastIndex){
+			list2.push(newsItem)
+			list.forEach((item,index)=>{
+				if(lastIndex!=index){
+					item.order=index+1
+					list2.push(item)
+				}					
+			})
+			this.sites=list2
+		}
+		this.timeShow=false
 	  },
 	  changeTime(index,item){
 		  this.timeShow=true

@@ -200,7 +200,7 @@ export default {
         },
         getSite(){
              this.$axios.post(this.$url+"mgSite/list",{
-               name:this.schoolStr,
+               name:this.siteStr,
                pageNum:this.pageNum,
                pageSize:this.pageSize
            }).then(res=>{

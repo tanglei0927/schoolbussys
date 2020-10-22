@@ -7,7 +7,8 @@
 export default {
   data(){
     return{
-      isLogin:true
+      isLogin:true,
+	  servier:'1.0'
     }
   },
   created(){

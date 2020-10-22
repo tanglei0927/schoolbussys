@@ -95,6 +95,11 @@
 						<p v-for="(item,index) in scope.row.relations">{{item.parentName?item.parentName:''}}{{item.relation&&item.relation!='null'?'('+item.relation+')':''}}</p>
 					</template> 
                 </el-table-column>
+				<el-table-column
+				prop="streetName"
+				label="小区"
+				width="150"> 
+				</el-table-column>  
                 <el-table-column
                 prop="siteName"
                 label="预设线路站点"

@@ -23,6 +23,11 @@
 			<div class="imgs">
 				<img v-for="(item,index) in info.replayPhotos" :src="imgurl+'file/downloadOss/'+item" alt="">
 			</div>
+			<!-- 回复框 -->
+			<div v-if="replayShow">
+				<el-input type="textarea" rows="5" v-model="replaymsg" placeholder="请输入回复内容"></el-input>
+				<el-button class="replaybtn" type="primary" @click="repalyInfo()">回复</el-button>
+			</div>
         </div>
     </div>
 </template>
@@ -32,17 +37,23 @@ export default {
         return{
             info:{},
             id:null,
-			imgurl:''
+			imgurl:'',
+			replayShow:false,
+			replaymsg:''
         }
     },
     created(){
         this.id=this.$route.query.id
+		if(this.$route.query.isreplay){
+			this.replayShow=true
+		}
 		if(this.id==0){
 			let info=sessionStorage.msgInfo
 			this.info=JSON.parse(info)			
 		}else{
 			this.init()
 		}
+		
 		this.imgurl=this.$url
     },
     methods:{
@@ -52,12 +63,35 @@ export default {
             }).then(res=>{
                 if(res.code==100){
                     this.info=res.info
+					if(this.info.replay){
+						this.replayShow=false
+					}
                 }
             })
         },
         goback(){
             this.$router.go(-1)
         },
+		repalyInfo(){
+			this.$axios.post(this.$url+"mgNews/addReply",{
+				replyId:this.id,
+				content:this.replaymsg
+			}).then(res=>{
+				if(res.code==100){
+					this.$message({
+						type:'success',
+						message:"回复成功!"
+					})
+					this.replaymsg=""
+					this.init()
+				}else{
+					this.$message({
+						type:'error',
+						message:res.msg
+					})
+				}
+			})
+		}
     }
 }
 </script>
@@ -95,5 +129,9 @@ em{
 		width: 200px;
 		margin: 10px;
 	}
+}
+.replaybtn{
+	float: right;
+	margin-top: 5px;
 }
 </style>
